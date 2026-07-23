@@ -1,0 +1,681 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>命运 · Destiny — Demo</title>
+<style>
+  :root{
+    --bg:        #050505;
+    --panel:     #0d0d0d;
+    --panel-2:   #131313;
+    --line:      #26241f;
+    --ink:       #e9e6de;
+    --ink-dim:   #8a877e;
+    --spade:     #d9d6cc;   /* attack   */
+    --heart:     #e0435c;   /* heal     */
+    --diamond:   #d4af37;   /* buff     */
+    --club:      #8a5fd1;   /* special  */
+    --memory:    #52c3b0;   /* memory card */
+    --serif: Georgia, 'Iowan Old Style', 'Times New Roman', serif;
+    --mono:  ui-monospace, 'SFMono-Regular', 'Courier New', monospace;
+  }
+  *{box-sizing:border-box;}
+  html,body{
+    margin:0; padding:0; height:100%; background:var(--bg); color:var(--ink);
+    font-family:var(--serif);
+    overflow:hidden;
+  }
+  #app{position:relative; width:100%; height:100vh; min-height:560px;}
+
+  .screen{
+    position:absolute; inset:0; display:none; flex-direction:column;
+    align-items:center; justify-content:center;
+  }
+  .screen.active{display:flex;}
+
+  /* faint vignette atmosphere */
+  #app::before{
+    content:''; position:absolute; inset:0; pointer-events:none; z-index:5;
+    background:radial-gradient(ellipse at 50% 40%, rgba(255,255,255,0.04), rgba(0,0,0,0) 60%),
+               radial-gradient(ellipse at 50% 100%, rgba(0,0,0,0.7), rgba(0,0,0,0) 55%);
+  }
+
+  /* ---------- TITLE ---------- */
+  #screen-title h1{
+    font-size:3.2em; letter-spacing:0.35em; font-weight:400; margin:0 0 0.15em 0;
+    text-align:center;
+  }
+  #screen-title .sub{
+    color:var(--ink-dim); letter-spacing:0.3em; font-size:0.8em; margin-bottom:3em;
+    font-family:var(--mono); text-transform:uppercase;
+  }
+  .btn{
+    background:transparent; color:var(--ink); border:1px solid var(--line);
+    padding:0.85em 2.4em; font-family:var(--mono); letter-spacing:0.15em;
+    font-size:0.85em; cursor:pointer; transition:all .25s ease; text-transform:uppercase;
+  }
+  .btn:hover{border-color:var(--ink); background:rgba(255,255,255,0.04);}
+  .btn:active{transform:translateY(1px);}
+  .btn.primary{color:var(--bg); background:var(--ink); border-color:var(--ink);}
+  .btn.primary:hover{background:#fff;}
+  .btn:disabled{opacity:0.3; cursor:not-allowed;}
+  .btn:disabled:hover{border-color:var(--line); background:transparent;}
+
+  /* ---------- STORY ---------- */
+  #screen-story{cursor:pointer;}
+  .story-stage{
+    position:relative; width:100%; height:100%; display:flex; align-items:flex-end; justify-content:center;
+  }
+  .story-hint{
+    position:absolute; top:8%; left:50%; transform:translateX(-50%);
+    color:var(--ink-dim); font-family:var(--mono); font-size:0.75em; letter-spacing:0.2em;
+    opacity:0.6;
+  }
+  .dialogue-box{
+    width:min(760px, 88vw); margin-bottom:9vh; padding:1.6em 2em;
+    border-top:1px solid var(--line); border-bottom:1px solid var(--line);
+    background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(0,0,0,0));
+    min-height:120px; position:relative;
+  }
+  .speaker{
+    font-family:var(--mono); letter-spacing:0.25em; font-size:0.78em; color:var(--ink-dim);
+    text-transform:uppercase; margin-bottom:0.7em;
+  }
+  .speaker.is-player{color:var(--ink);}
+  .dialogue-text{
+    font-size:1.35em; line-height:1.65; min-height:2.4em; font-weight:400;
+  }
+  .continue-mark{
+    position:absolute; right:1.6em; bottom:1.1em; font-family:var(--mono);
+    color:var(--ink-dim); font-size:0.8em; animation:blink 1.4s infinite;
+  }
+  @keyframes blink{0%,100%{opacity:0.15;}50%{opacity:0.9;}}
+
+  /* ---------- TRANSITION (signature element) ---------- */
+  #screen-transition{background:var(--bg);}
+  .card-flip-wrap{
+    perspective:1000px; width:150px; height:220px; position:relative;
+  }
+  .card-face{
+    position:absolute; inset:0; border:1px solid var(--line); border-radius:6px;
+    background:var(--panel); display:flex; align-items:center; justify-content:center;
+    font-size:5em; animation:cardCycle 2s steps(4) 1;
+    box-shadow:0 0 40px rgba(255,255,255,0.05);
+  }
+  .card-face .pip{position:absolute; opacity:0;}
+  .pip.p1{color:var(--spade); animation:showPip 2s steps(4) 1;}
+  .pip.p2{color:var(--diamond); animation:showPip 2s steps(4) 1; animation-delay:-0.5s;}
+  .pip.p3{color:var(--heart); animation:showPip 2s steps(4) 1; animation-delay:-1s;}
+  .pip.p4{color:var(--club); animation:showPip 2s steps(4) 1; animation-delay:-1.5s;}
+  @keyframes cardCycle{
+    0%{transform:rotateY(0deg);} 100%{transform:rotateY(1440deg);}
+  }
+  @keyframes showPip{
+    0%,24.9%{opacity:0;} 0.1%,24.8%{opacity:1;} 25%,100%{opacity:0;}
+  }
+  .loading-text{
+    margin-top:2em; font-family:var(--mono); letter-spacing:0.3em; color:var(--ink-dim);
+    font-size:0.85em;
+  }
+
+  /* ---------- BATTLE ---------- */
+  #screen-battle{justify-content:space-between; padding:2.2vh 0;}
+  .enemy-zone{width:100%; display:flex; flex-direction:column; align-items:center; gap:0.6em; padding-top:1vh;}
+  .enemy-name{font-family:var(--mono); letter-spacing:0.2em; font-size:0.95em; color:var(--ink-dim);}
+  .enemy-sprite{
+    width:96px; height:96px; border:1px solid var(--line); border-radius:50%;
+    display:flex; align-items:center; justify-content:center; font-size:2.4em;
+    box-shadow:0 0 30px rgba(138,95,209,0.12) inset; transition:transform .15s ease;
+  }
+  .enemy-sprite.hit{animation:shake .35s;}
+  @keyframes shake{
+    0%,100%{transform:translateX(0);} 25%{transform:translateX(-8px);} 75%{transform:translateX(8px);}
+  }
+  .hp-bar-wrap{width:220px;}
+  .hp-label{display:flex; justify-content:space-between; font-family:var(--mono); font-size:0.72em; color:var(--ink-dim); margin-bottom:3px;}
+  .hp-bar{height:6px; background:var(--panel-2); border:1px solid var(--line); overflow:hidden;}
+  .hp-fill{height:100%; background:var(--heart); transition:width .35s ease;}
+  .hp-fill.player-fill{background:var(--memory);}
+
+  .battle-center{
+    flex:1; width:100%; display:flex; align-items:center; justify-content:center; gap:3vw;
+    position:relative;
+  }
+  .status-tags{display:flex; gap:0.5em; flex-wrap:wrap; justify-content:center; max-width:220px;}
+  .tag{
+    font-family:var(--mono); font-size:0.68em; letter-spacing:0.1em; padding:0.3em 0.6em;
+    border:1px solid var(--line); color:var(--ink-dim);
+  }
+  .log-line{
+    position:absolute; top:0; left:50%; transform:translateX(-50%);
+    font-family:var(--mono); font-size:0.8em; color:var(--ink-dim); letter-spacing:0.05em;
+    white-space:nowrap; opacity:0; transition:opacity .3s ease;
+  }
+  .log-line.show{opacity:1;}
+
+  .player-zone{width:100%; display:flex; flex-direction:column; align-items:center; gap:1em;}
+  .player-stats{
+    display:flex; gap:2.4em; align-items:center; font-family:var(--mono); font-size:0.8em; color:var(--ink-dim);
+  }
+  .ap-dots{display:flex; gap:5px;}
+  .ap-dot{width:9px; height:9px; border-radius:50%; border:1px solid var(--diamond); background:transparent;}
+  .ap-dot.filled{background:var(--diamond);}
+
+  .hand{display:flex; gap:0.9em; justify-content:center; min-height:150px; align-items:flex-end;}
+  .card{
+    width:92px; height:132px; border:1px solid var(--line); border-radius:8px;
+    background:var(--panel); display:flex; flex-direction:column; align-items:center;
+    justify-content:space-between; padding:0.7em 0.4em; cursor:pointer;
+    transition:transform .15s ease, border-color .15s ease, box-shadow .15s ease;
+    position:relative;
+  }
+  .card:hover{transform:translateY(-10px); border-color:var(--ink);}
+  .card.disabled{opacity:0.35; cursor:not-allowed;}
+  .card.disabled:hover{transform:none; border-color:var(--line);}
+  .card .suit{font-size:1.9em;}
+  .card .value{font-family:var(--mono); font-size:1.1em; letter-spacing:0.05em;}
+  .card .desc{font-family:var(--mono); font-size:0.58em; color:var(--ink-dim); text-align:center; line-height:1.3;}
+  .card.suit-spade .suit,.card.suit-spade .value{color:var(--spade);}
+  .card.suit-heart .suit,.card.suit-heart .value{color:var(--heart);}
+  .card.suit-diamond .suit,.card.suit-diamond .value{color:var(--diamond);}
+  .card.suit-club .suit,.card.suit-club .value{color:var(--club);}
+
+  .battle-actions{display:flex; gap:1em; margin-top:0.4em;}
+
+  .teach-tip{
+    position:absolute; bottom:190px; left:50%; transform:translateX(-50%);
+    background:var(--panel); border:1px solid var(--line); padding:0.8em 1.4em;
+    font-family:var(--mono); font-size:0.75em; color:var(--ink-dim); letter-spacing:0.03em;
+    max-width:340px; text-align:center; z-index:6;
+  }
+
+  /* ---------- VICTORY ---------- */
+  .center-msg{text-align:center;}
+  .center-msg h2{font-size:2.2em; letter-spacing:0.2em; font-weight:400; margin-bottom:0.3em;}
+  .center-msg p{color:var(--ink-dim); font-family:var(--mono); font-size:0.85em; letter-spacing:0.1em;}
+  .reward-card{
+    margin:2em auto; width:110px; height:158px; border:1px solid var(--memory); border-radius:8px;
+    background:var(--panel); display:flex; flex-direction:column; align-items:center; justify-content:center;
+    gap:0.5em; box-shadow:0 0 34px rgba(82,195,176,0.18);
+  }
+  .reward-card .suit{font-size:2.4em; color:var(--memory);}
+  .reward-card .name{font-family:var(--mono); font-size:0.68em; color:var(--memory); letter-spacing:0.08em;}
+
+  /* ---------- ALBUM ---------- */
+  #screen-album{align-items:center; justify-content:flex-start; padding-top:8vh;}
+  .album-header{text-align:center; margin-bottom:0.4em;}
+  .album-header h2{font-size:1.7em; letter-spacing:0.3em; font-weight:400; margin:0;}
+  .album-count{font-family:var(--mono); color:var(--ink-dim); font-size:0.8em; letter-spacing:0.1em; margin-top:0.3em;}
+  .album-grid{
+    display:grid; grid-template-columns:repeat(4, 78px); gap:1.1em; margin:2.4em 0 2em 0;
+    max-width:420px; justify-content:center;
+  }
+  .album-slot{
+    width:78px; height:110px; border:1px solid var(--line); border-radius:6px;
+    display:flex; flex-direction:column; align-items:center; justify-content:center; gap:0.35em;
+    background:var(--panel);
+  }
+  .album-slot.filled.suit-spade{border-color:var(--spade);}
+  .album-slot.filled.suit-heart{border-color:var(--heart);}
+  .album-slot.filled.suit-diamond{border-color:var(--diamond);}
+  .album-slot.filled.suit-club{border-color:var(--club);}
+  .album-slot.filled.suit-memory{border-color:var(--memory);}
+  .album-slot .suit{font-size:1.6em;}
+  .album-slot.filled.suit-spade .suit{color:var(--spade);}
+  .album-slot.filled.suit-heart .suit{color:var(--heart);}
+  .album-slot.filled.suit-diamond .suit{color:var(--diamond);}
+  .album-slot.filled.suit-club .suit{color:var(--club);}
+  .album-slot.filled.suit-memory .suit{color:var(--memory);}
+  .album-slot .aname{font-family:var(--mono); font-size:0.55em; color:var(--ink-dim); text-align:center;}
+  .album-slot.empty{opacity:0.25;}
+  .album-slot .aname.empty-txt{opacity:0.5;}
+
+  .footnote{
+    position:fixed; bottom:14px; left:50%; transform:translateX(-50%);
+    font-family:var(--mono); font-size:0.65em; color:#3d3b35; letter-spacing:0.15em; z-index:2;
+  }
+</style>
+</head>
+<body>
+<div id="app">
+
+  <!-- TITLE -->
+  <div class="screen active" id="screen-title">
+    <h1>命 运</h1>
+    <div class="sub">DESTINY · DEMO</div>
+    <button class="btn primary" id="btn-start">开始游戏</button>
+  </div>
+
+  <!-- STORY -->
+  <div class="screen" id="screen-story">
+    <div class="story-stage">
+      <div class="story-hint">点击 屏幕 继续</div>
+      <div class="dialogue-box">
+        <div class="speaker" id="speaker-name">???</div>
+        <div class="dialogue-text" id="dialogue-text"></div>
+        <div class="continue-mark">▼</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TRANSITION -->
+  <div class="screen" id="screen-transition">
+    <div class="card-flip-wrap">
+      <div class="card-face">
+        <span class="pip p1">♠</span>
+        <span class="pip p2">♦</span>
+        <span class="pip p3">♥</span>
+        <span class="pip p4">♣</span>
+      </div>
+    </div>
+    <div class="loading-text">LOADING...</div>
+  </div>
+
+  <!-- BATTLE -->
+  <div class="screen" id="screen-battle">
+    <div class="enemy-zone">
+      <div class="enemy-name" id="enemy-name">失控兽</div>
+      <div class="enemy-sprite" id="enemy-sprite">◈</div>
+      <div class="hp-bar-wrap">
+        <div class="hp-label"><span>HP</span><span id="enemy-hp-text">10/10</span></div>
+        <div class="hp-bar"><div class="hp-fill" id="enemy-hp-fill" style="width:100%"></div></div>
+      </div>
+    </div>
+
+    <div class="battle-center">
+      <div class="log-line" id="battle-log"></div>
+      <div class="status-tags" id="status-tags"></div>
+    </div>
+
+    <div class="teach-tip" id="teach-tip" style="display:none;"></div>
+
+    <div class="player-zone">
+      <div class="player-stats">
+        <div>HP <span id="player-hp-text" style="color:var(--memory)">20/20</span></div>
+        <div style="display:flex; align-items:center; gap:8px;">行动力 <div class="ap-dots" id="ap-dots"></div></div>
+      </div>
+      <div class="hp-bar-wrap" style="width:260px;">
+        <div class="hp-bar"><div class="hp-fill player-fill" id="player-hp-fill" style="width:100%"></div></div>
+      </div>
+      <div class="hand" id="hand"></div>
+      <div class="battle-actions">
+        <button class="btn" id="btn-end-turn">结束回合</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- VICTORY -->
+  <div class="screen" id="screen-victory">
+    <div class="center-msg">
+      <h2>战 斗 胜 利</h2>
+      <p id="victory-sub">失控兽 已被击败</p>
+      <div class="reward-card">
+        <div class="suit">☆</div>
+        <div class="name">记忆·觉醒</div>
+      </div>
+      <p>你获得了第一张记忆卡牌</p>
+      <div style="margin-top:2em;">
+        <button class="btn primary" id="btn-to-album">打开记忆相册</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- DEFEAT -->
+  <div class="screen" id="screen-defeat">
+    <div class="center-msg">
+      <h2 style="color:var(--heart);">意 识 消 散</h2>
+      <p>你倒下了……但故事还没有结束</p>
+      <div style="margin-top:2em;">
+        <button class="btn primary" id="btn-retry">重新挑战</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ALBUM -->
+  <div class="screen" id="screen-album">
+    <div class="album-header">
+      <h2>记忆相册</h2>
+      <div class="album-count" id="album-count">已收录 0/52</div>
+    </div>
+    <div class="album-grid" id="album-grid"></div>
+    <button class="btn" id="btn-restart-demo">重新开始 Demo</button>
+  </div>
+
+  <div class="footnote">命运 · DESTINY — DEMO v0.1</div>
+</div>
+
+<script>
+(function(){
+  "use strict";
+
+  /* ---------------- DATA ---------------- */
+  const CARD_DEFS = {
+    spade3:   { id:'spade3',   suit:'♠', suitClass:'suit-spade',   label:'黑桃3', type:'attack',  value:3, desc:'造成 3 点伤害' },
+    heart5:   { id:'heart5',   suit:'♥', suitClass:'suit-heart',   label:'红心5', type:'heal',    value:5, desc:'恢复 5 点生命' },
+    diamond2: { id:'diamond2', suit:'♦', suitClass:'suit-diamond', label:'方块2', type:'buff',    value:2, desc:'下次攻击伤害+2' },
+    club4:    { id:'club4',    suit:'♣', suitClass:'suit-club',    label:'梅花4', type:'special', value:4, desc:'跳过敌人下次攻击' },
+  };
+  const MEMORY_CARD = { id:'memory1', suit:'☆', suitClass:'suit-memory', label:'记忆·觉醒', desc:'第一段找回的记忆' };
+
+  const STORY = [
+    { speaker:'玩家',  lines:['天啊，这是哪儿？','我怎么会在这里？'] },
+    { speaker:'萨拉',  lines:['你醒了。','别动，你刚刚伤得很重。'] },
+    { speaker:'泰勒',  lines:['萨拉！','他醒了！','快过来看看！'] },
+    { speaker:'伯恩',  lines:['大哥哥。','你叫什么名字？','你从哪里来？','还记得回去的路吗？'] },
+    { speaker:'玩家',  lines:['我……','我不知道。','我什么都不记得了。'] },
+    { speaker:'伯恩',  lines:['连自己是谁都不知道？','这下麻烦了。'] },
+    { speaker:'萨拉',  lines:['不如先带他回去。','至少让他恢复。'] },
+    { speaker:'泰勒',  lines:['我觉得可以！','总不能把他丢在这里。'] },
+    { speaker:'艾莉',  lines:['我反对。','一个连自己是谁都不知道的人。','你们真的放心带他回去？','而且……','他的身上有危险的气息。'] },
+    { speaker:'泰勒',  lines:['危险？','你能感觉出来？'] },
+    { speaker:'艾莉',  lines:['当然。','否则你们不知道死多少次了。'] },
+    { speaker:'艾莉',  lines:['等等！','那是什么？'] },
+  ];
+  const DIALOGUE_QUEUE = [];
+  STORY.forEach(block => block.lines.forEach(line => DIALOGUE_QUEUE.push({ speaker: block.speaker, text: line })));
+
+  /* ---------------- STATE ---------------- */
+  const state = {
+    dialogueIndex: 0,
+    player: { hp:20, maxHp:20, ap:3, maxAp:3, hand:[], deck:[], discard:[], buffNextAtk:0, invincibleNextEnemyTurn:false, skipEnemyAttack:false },
+    enemy: { name:'失控兽', hp:10, maxHp:10, atk:3 },
+    cardsPlayedThisTurn: 0,
+    suitsPlayedThisTurn: [],
+    combosUsedThisTurn: [],
+    collection: new Set(['spade3','heart5','diamond2','club4']),
+    firstTurn: true,
+  };
+
+  /* ---------------- UTIL ---------------- */
+  function $(sel){ return document.querySelector(sel); }
+  function showScreen(id){
+    document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+    $('#' + id).classList.add('active');
+  }
+  function shuffle(arr){
+    for (let i = arr.length - 1; i > 0; i--){
+      const j = Math.floor(Math.random() * (i + 1));
+      [arr[i], arr[j]] = [arr[j], arr[i]];
+    }
+    return arr;
+  }
+
+  /* ---------------- STORY SCREEN ---------------- */
+  function renderDialogue(){
+    const entry = DIALOGUE_QUEUE[state.dialogueIndex];
+    const nameEl = $('#speaker-name');
+    nameEl.textContent = entry.speaker;
+    nameEl.classList.toggle('is-player', entry.speaker === '玩家');
+    $('#dialogue-text').textContent = entry.text;
+  }
+  function advanceDialogue(){
+    state.dialogueIndex++;
+    if (state.dialogueIndex >= DIALOGUE_QUEUE.length){
+      $('#screen-story').removeEventListener('click', advanceDialogue);
+      runTransition('battle');
+      return;
+    }
+    renderDialogue();
+  }
+
+  /* ---------------- TRANSITION ---------------- */
+  function runTransition(target){
+    showScreen('screen-transition');
+    // restart animation
+    const face = document.querySelector('.card-face');
+    face.style.animation = 'none';
+    void face.offsetWidth;
+    face.style.animation = '';
+    document.querySelectorAll('.pip').forEach(p => { p.style.animation = 'none'; void p.offsetWidth; p.style.animation=''; });
+
+    setTimeout(() => {
+      if (target === 'battle') startBattle();
+      else if (target === 'album') showAlbum();
+    }, 2000);
+  }
+
+  /* ---------------- BATTLE ---------------- */
+  function buildDeck(){
+    const deck = [];
+    Object.keys(CARD_DEFS).forEach(id => {
+      for (let i = 0; i < 3; i++) deck.push(id);
+    });
+    return shuffle(deck);
+  }
+
+  function startBattle(){
+    state.player.hp = state.player.maxHp;
+    state.player.ap = state.player.maxAp;
+    state.player.hand = [];
+    state.player.discard = [];
+    state.player.buffNextAtk = 0;
+    state.player.invincibleNextEnemyTurn = false;
+    state.player.skipEnemyAttack = false;
+    state.enemy.hp = state.enemy.maxHp;
+    state.cardsPlayedThisTurn = 0;
+    state.suitsPlayedThisTurn = [];
+    state.firstTurn = true;
+
+    state.player.deck = buildDeck();
+    for (let i = 0; i < 3; i++) drawCard();
+
+    showScreen('screen-battle');
+    renderBattle();
+
+    $('#teach-tip').style.display = 'block';
+    $('#teach-tip').textContent = '点击手牌出牌，消耗行动力。每回合最多出 3 张牌，出牌后点击"结束回合"，敌人才会行动。';
+  }
+
+  function drawCard(){
+    if (state.player.hand.length >= 6) return;
+    if (state.player.deck.length === 0){
+      if (state.player.discard.length === 0) return;
+      state.player.deck = shuffle(state.player.discard);
+      state.player.discard = [];
+    }
+    state.player.hand.push(state.player.deck.pop());
+  }
+
+  function setLog(msg){
+    const el = $('#battle-log');
+    el.textContent = msg;
+    el.classList.remove('show');
+    void el.offsetWidth;
+    el.classList.add('show');
+  }
+
+  function renderBattle(){
+    $('#enemy-hp-text').textContent = `${state.enemy.hp}/${state.enemy.maxHp}`;
+    $('#enemy-hp-fill').style.width = Math.max(0, (state.enemy.hp / state.enemy.maxHp) * 100) + '%';
+    $('#player-hp-text').textContent = `${state.player.hp}/${state.player.maxHp}`;
+    $('#player-hp-fill').style.width = Math.max(0, (state.player.hp / state.player.maxHp) * 100) + '%';
+
+    const apDots = $('#ap-dots');
+    apDots.innerHTML = '';
+    for (let i = 0; i < state.player.maxAp; i++){
+      const d = document.createElement('div');
+      d.className = 'ap-dot' + (i < state.player.ap ? ' filled' : '');
+      apDots.appendChild(d);
+    }
+
+    const tags = $('#status-tags');
+    tags.innerHTML = '';
+    if (state.player.buffNextAtk > 0) addTag(tags, `强化 +${state.player.buffNextAtk}`);
+    if (state.player.skipEnemyAttack) addTag(tags, '敌方攻击将被跳过');
+    if (state.player.invincibleNextEnemyTurn) addTag(tags, '无敌状态');
+
+    const hand = $('#hand');
+    hand.innerHTML = '';
+    const cardLimitReached = state.cardsPlayedThisTurn >= 3;
+    state.player.hand.forEach((cardId, idx) => {
+      const def = CARD_DEFS[cardId];
+      const disabled = state.player.ap < 1 || cardLimitReached;
+      const card = document.createElement('div');
+      card.className = `card ${def.suitClass}` + (disabled ? ' disabled' : '');
+      card.innerHTML = `
+        <div class="suit">${def.suit}</div>
+        <div class="value">${def.label}</div>
+        <div class="desc">${def.desc}</div>
+      `;
+      if (!disabled){
+        card.addEventListener('click', () => playCard(idx));
+      }
+      hand.appendChild(card);
+    });
+  }
+  function addTag(container, text){
+    const t = document.createElement('div');
+    t.className = 'tag';
+    t.textContent = text;
+    container.appendChild(t);
+  }
+
+  function playCard(idx){
+    if (state.cardsPlayedThisTurn >= 3) return;
+    const cardId = state.player.hand[idx];
+    const def = CARD_DEFS[cardId];
+    if (state.player.ap < 1) return;
+
+    state.player.ap -= 1;
+    state.cardsPlayedThisTurn += 1;
+    state.player.hand.splice(idx, 1);
+    state.player.discard.push(cardId);
+
+    let logMsg = '';
+    if (def.type === 'attack'){
+      const dmg = def.value + state.player.buffNextAtk;
+      state.player.buffNextAtk = 0;
+      state.enemy.hp = Math.max(0, state.enemy.hp - dmg);
+      logMsg = `你打出 ${def.label}，造成 ${dmg} 点伤害`;
+      const sprite = $('#enemy-sprite');
+      sprite.classList.remove('hit'); void sprite.offsetWidth; sprite.classList.add('hit');
+    } else if (def.type === 'heal'){
+      const before = state.player.hp;
+      state.player.hp = Math.min(state.player.maxHp, state.player.hp + def.value);
+      logMsg = `你打出 ${def.label}，恢复 ${state.player.hp - before} 点生命`;
+    } else if (def.type === 'buff'){
+      state.player.buffNextAtk += def.value;
+      logMsg = `你打出 ${def.label}，下次攻击将强化`;
+    } else if (def.type === 'special'){
+      state.player.skipEnemyAttack = true;
+      logMsg = `你打出 ${def.label}，敌人的下次攻击将被跳过`;
+    }
+
+    checkCombo(def.type);
+    setLog(logMsg);
+    renderBattle();
+
+    if (state.enemy.hp <= 0){
+      setTimeout(onVictory, 500);
+      return;
+    }
+  }
+
+  function checkCombo(playedType){
+    // suit-type mapping: attack=spade, heal=heart, buff=diamond, special=club
+    const map = { attack:'spade', heal:'heart', buff:'diamond', special:'club' };
+    const played = map[playedType];
+    state.suitsPlayedThisTurn.push(played);
+
+    const has = s => state.suitsPlayedThisTurn.includes(s);
+    function tryCombo(a, b, key, effect, msg){
+      if (state.combosUsedThisTurn.includes(key)) return;
+      if (has(a) && has(b)){
+        state.combosUsedThisTurn.push(key);
+        effect();
+        setTimeout(() => setLog(msg), 700);
+      }
+    }
+    tryCombo('spade','diamond','sd', () => {
+      state.enemy.hp = Math.max(0, state.enemy.hp - 2);
+    }, '组合 黑桃+方块：暴击追加 2 点伤害！');
+    tryCombo('heart','spade','hs', () => {
+      state.player.invincibleNextEnemyTurn = true;
+    }, '组合 红心+黑桃：获得无敌状态！');
+    tryCombo('club','diamond','cd', () => {
+      state.player.hp = Math.min(state.player.maxHp, state.player.hp + 4);
+    }, '组合 梅花+方块：恢复 4 点生命！');
+  }
+
+  function endTurn(){
+    $('#teach-tip').style.display = 'none';
+    state.firstTurn = false;
+    // enemy attack phase
+    let dmg = state.enemy.atk;
+    let msg;
+    if (state.player.skipEnemyAttack){
+      dmg = 0;
+      msg = `${state.enemy.name} 的攻击被跳过了`;
+      state.player.skipEnemyAttack = false;
+    } else if (state.player.invincibleNextEnemyTurn){
+      dmg = 0;
+      msg = `你处于无敌状态，完全抵挡了攻击`;
+      state.player.invincibleNextEnemyTurn = false;
+    } else {
+      state.player.hp = Math.max(0, state.player.hp - dmg);
+      msg = `${state.enemy.name} 发动攻击，你受到 ${dmg} 点伤害`;
+    }
+    setLog(msg);
+
+    // reset turn state
+    state.player.ap = state.player.maxAp;
+    state.cardsPlayedThisTurn = 0;
+    state.suitsPlayedThisTurn = [];
+    state.combosUsedThisTurn = [];
+    drawCard();
+
+    renderBattle();
+
+    if (state.player.hp <= 0){
+      setTimeout(onDefeat, 500);
+    }
+  }
+
+  function onVictory(){
+    state.collection.add(MEMORY_CARD.id);
+    showScreen('screen-victory');
+  }
+  function onDefeat(){
+    showScreen('screen-defeat');
+  }
+
+  /* ---------------- ALBUM ---------------- */
+  function showAlbum(){
+    const grid = $('#album-grid');
+    grid.innerHTML = '';
+    const allCards = [...Object.values(CARD_DEFS), MEMORY_CARD];
+    allCards.forEach(def => {
+      const owned = state.collection.has(def.id);
+      const slot = document.createElement('div');
+      slot.className = `album-slot ${owned ? 'filled ' + def.suitClass : 'empty'}`;
+      slot.innerHTML = `
+        <div class="suit">${owned ? def.suit : '?'}</div>
+        <div class="aname ${owned ? '' : 'empty-txt'}">${owned ? def.label : '未收录'}</div>
+      `;
+      grid.appendChild(slot);
+    });
+    $('#album-count').textContent = `已收录 ${state.collection.size}/52`;
+    showScreen('screen-album');
+  }
+
+  /* ---------------- BOOTSTRAP ---------------- */
+  $('#btn-start').addEventListener('click', () => {
+    state.dialogueIndex = 0;
+    showScreen('screen-story');
+    renderDialogue();
+    $('#screen-story').addEventListener('click', advanceDialogue);
+  });
+
+  $('#btn-end-turn').addEventListener('click', endTurn);
+  $('#btn-to-album').addEventListener('click', () => runTransition('album'));
+  $('#btn-retry').addEventListener('click', startBattle);
+  $('#btn-restart-demo').addEventListener('click', () => {
+    state.collection = new Set(['spade3','heart5','diamond2','club4']);
+    showScreen('screen-title');
+  });
+
+})();
+</script>
+</body>
+</html>

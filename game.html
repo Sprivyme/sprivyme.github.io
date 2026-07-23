@@ -1067,7 +1067,7 @@
         <div id="coinflip-screen" class="box" hidden>
             <div id="cf-step1">
                 <div class="stat-line" data-i18n="cf.shuffle">&gt; SYSTEM: shuffling... 108 cards loaded</div>
-                <div class="stat-line" data-i18n="cf.exReady">&gt; EX deck ready: Cyber Angel, Jungle Tyrant</div>
+                <div class="stat-line" data-i18n="cf.exReady">&gt; EX deck ready: Cyber Angel, Jungle Tyrant, Amnesiac Wanderer</div>
                 <div class="stat-line" data-i18n="cf.toss">&gt; A coin flip decides who goes first</div>
                 <div class="stat-line" data-i18n="cf.choose">&gt; Call the flip:</div>
                 <div class="choice-row">
@@ -1239,7 +1239,7 @@
                     'hero.full.bosca': '波斯卡 (生命25，技能：6法力，尽可能召唤2/2生物)',
                     'hero.confirm': '[ 确认并继续 ]',
                     'cf.shuffle': '> 系统：洗牌中…… 108 张卡牌已装载',
-                    'cf.exReady': '> EX牌库已就绪：赛博天使、密林暴君',
+                    'cf.exReady': '> EX牌库已就绪：赛博天使、密林暴君、失忆的流浪者',
                     'cf.toss': '> 投币决定谁先手',
                     'cf.choose': '> 选择你的猜面：',
                     'cf.heads': '[ 正面 O ]',
@@ -1269,6 +1269,7 @@
                     'cd.legendTag': ' ★传说',
                     'cd.dragonTag': ' 🐉魔龙',
                     'cd.exTag': ' ✨EX',
+                    'cd.copied': '已复制：',
                     'cd.readerAction': '[ 消耗2法力：翻阅牌库 ]',
                     'cd.readerUsed': '[ 本回合已翻阅 ]',
                     'exui.title': '✨ 选择要召唤的EX卡',
@@ -1283,13 +1284,16 @@
                     'exui.sacrificeBuff': '[ 献祭强化 +1 ]',
                     'exui.cancelExAttack': '[ 取消EX攻击 ]',
                     'exui.exAttack': '[ EX攻击×{n} ]',
+                    'exui.wandererSkill': '[ 流浪者技能：弃1手牌 ]',
+                    'exui.cancelWanderer': '[ 取消流浪者技能 ]',
+                    'exui.cancelCopy': '[ 取消复制 ]',
                     'exui.skillUsed': '技能已用',
                     'exui.skillReady': '技能可用',
                     'exui.tyrantStatus': '强化+{b}｜攻击{n}次',
                     'exui.sacCount': '祭品 {a}/{b}',
                     'exui.libCount': 'EX卡牌库<br>{n}张可用',
                     'exui.summoned': '已召唤：{name}',
-                    'exui.ready2': '2张可用',
+                    'exui.ready2': '3张可用',
                     'coll.title': '📚 卡牌图鉴',
                     'coll.desc': '你在对局中实际使用过的卡牌会点亮图鉴；仅抽到不会点亮。',
                     'coll.used': '✓ 已使用',
@@ -1372,7 +1376,7 @@
                     'hero.full.bosca': 'Bosca (25 HP — 6 mana: summon 2/2 creatures)',
                     'hero.confirm': '[ CONFIRM ]',
                     'cf.shuffle': '> SYSTEM: shuffling... 108 cards loaded',
-                    'cf.exReady': '> EX deck ready: Cyber Angel, Jungle Tyrant',
+                    'cf.exReady': '> EX deck ready: Cyber Angel, Jungle Tyrant, Amnesiac Wanderer',
                     'cf.toss': '> A coin flip decides who goes first',
                     'cf.choose': '> Call the flip:',
                     'cf.heads': '[ HEADS O ]',
@@ -1402,6 +1406,7 @@
                     'cd.legendTag': ' ★LEGEND',
                     'cd.dragonTag': ' 🐉DRAGON',
                     'cd.exTag': ' ✨EX',
+                    'cd.copied': 'Copied: ',
                     'cd.readerAction': '[ 2 MANA: SCOUT DECK ]',
                     'cd.readerUsed': '[ ALREADY SCOUTED ]',
                     'exui.title': '✨ CHOOSE AN EX CARD TO SUMMON',
@@ -1416,13 +1421,16 @@
                     'exui.sacrificeBuff': '[ SACRIFICE +1 ]',
                     'exui.cancelExAttack': '[ CANCEL ATK ]',
                     'exui.exAttack': '[ EX ATK ×{n} ]',
+                    'exui.wandererSkill': '[ WANDERER: DISCARD 1 ]',
+                    'exui.cancelWanderer': '[ CANCEL SKILL ]',
+                    'exui.cancelCopy': '[ CANCEL COPY ]',
                     'exui.skillUsed': 'SKILL USED',
                     'exui.skillReady': 'SKILL READY',
                     'exui.tyrantStatus': '+{b} PWR | {n} ATK',
                     'exui.sacCount': 'Tributes {a}/{b}',
                     'exui.libCount': 'EX LIBRARY<br>{n} available',
                     'exui.summoned': 'Summoned: {name}',
-                    'exui.ready2': '2 available',
+                    'exui.ready2': '3 available',
                     'coll.title': '📚 CARD CODEX',
                     'coll.desc': 'Cards you actually play in battle light up the codex; merely drawing them does not.',
                     'coll.used': '✓ USED',
@@ -1457,7 +1465,7 @@
                     'log.aiHeroChose': 'AI选择了英雄：{name}',
                     'log.gameStart': '游戏开始。{who} 先手。',
                     'log.legendIn': '传说卡牌已加入战场！',
-                    'log.exReady': '✨ EX牌库已就绪：赛博天使 / 密林暴君',
+                    'log.exReady': '✨ EX牌库已就绪：赛博天使 / 密林暴君 / 失忆的流浪者',
                     'log.deckEmpty': '{who}：牌库已空，无法抽牌。',
                     'log.handFull': '{who} 手牌已满，{name} 被焚毁。',
                     'log.aiAvaSkill': '✨ AI的艾娃发动技能：本回合所有生物费用为0！',
@@ -1518,6 +1526,29 @@
                     'log.mustClear': '必须先清除所有敌方生物才能攻击玩家！',
                     'log.tyrantHitFace': '{who} 的 密林暴君 攻击本体，造成 {p} 点伤害（第 {n} 次攻击）',
                     'log.tyrantHitCreature': '{who} 的 密林暴君 攻击 {name}，造成 {p} 点伤害（EX不受反击伤害）',
+                    'log.wandererNeed': '召唤失忆的流浪者需要场上有1只恰好4费的己方生物！',
+                    'log.wandererPick': '点击1只恰好4费的己方生物作为祭品，召唤失忆的流浪者。',
+                    'log.wandererInvalid': '{name} 不符合召唤条件：失忆的流浪者需要恰好4费的生物。',
+                    'log.exSummonWanderer': '✨ {who} 召唤了 失忆的流浪者！(数值4，弃牌复制对方生物)',
+                    'log.wandererNotSummoned': '失忆的流浪者尚未召唤！',
+                    'log.wandererSkillUsed': '失忆的流浪者的技能本回合已使用。',
+                    'log.wandererNoTarget': '对方场上没有可复制的生物！',
+                    'log.wandererPickDiscard': '点击手牌选择要丢弃的牌，然后复制对方1只生物 (再次点击技能按钮取消)',
+                    'log.wandererDiscard': '{who} 丢弃了 {name} 发动失忆的流浪者技能！',
+                    'log.wandererPickCopy': '点击对方场上1只生物，复制其数值和能力。',
+                    'log.wandererCopy': '🌀 {who} 的 失忆的流浪者 复制了 {name}：数值变为 {p}，并获得其能力！',
+                    'log.wandererHeroWake': '🌀 复制了传说的勇者：失忆的流浪者立即解除休眠！',
+                    'log.wandererCancel': '已取消失忆的流浪者的复制。',
+                    'log.exReaderDone': '{name} 查看了4张牌，拿走了其中的法术。',
+                    'log.exNoAttack': 'EX卡本回合无法攻击（休眠中或已攻击）。',
+                    'log.exHitFace': '{who} 的 {name} 攻击本体，造成 {p} 点伤害',
+                    'log.exHitCreature': '{who} 的 {name} 攻击 {target}，造成 {p} 点伤害（EX不受反击伤害）',
+                    'log.exRetaliate': '{who} 的 {name} 攻击EX卡 {ex}：EX不会被战斗破坏，{name} 受到 {p} 点反击伤害',
+                    'log.exNoHp': '{name} 是EX卡，没有生命值，该效果对其无效。',
+                    'log.exNoPotion': 'EX卡没有生命值，无法附着生命药水。',
+                    'log.exNovaImmune': '{name} 是EX卡，不受该伤害影响。',
+                    'log.exUndying': '🐉 不灭之力觉醒！{name} 返回EX牌库，数值变为 8！',
+                    'log.exDestroyed': '✨ {who} 的EX卡 {name} 被 {card} 破坏，返回EX牌库（可再次召唤）。',
                     'log.spellNeed2': '法力不足，需要2点法力激活法术！',
                     'log.spellActivated': '消耗2法力激活了手中的法术！',
                     'log.aiSpellActivated': 'AI消耗2法力激活了手中的法术！',
@@ -1571,7 +1602,8 @@
                     'hint.pickOwn': '> 选择你的一个生物作为目标',
                     'hint.pickEnemy': '> 选择一个敌方生物作为目标',
                     'hint.tyrantSac': '> 🌿 选择1只己方生物献祭，密林暴君数值+1并获得1次攻击',
-                    'hint.tyrantAttack': '> 🌿 密林暴君出击：选择敌方生物，或清空敌方生物后攻击本体',
+                    'hint.tyrantAttack': '> ✨ EX攻击：选择敌方生物，或清空敌方生物后攻击本体',
+                    'hint.wandererCopy': '> 🌀 点击对方场上1只生物，复制其数值和能力',
                     'hint.attack': '> 选择敌方生物，或清空敌方生物后攻击本体',
                     'hint.discard': '> 点击手牌弃掉，获得 +2 法力',
                     'hint.avaActive': '> ✨ 艾娃技能生效中！生物费用为0',
@@ -1602,7 +1634,7 @@
                     'log.aiHeroChose': 'AI chose hero: {name}',
                     'log.gameStart': 'Game start — first move: {who}.',
                     'log.legendIn': 'Legendary cards have entered the battlefield!',
-                    'log.exReady': '✨ EX deck ready: Cyber Angel / Jungle Tyrant',
+                    'log.exReady': '✨ EX deck ready: Cyber Angel / Jungle Tyrant / Amnesiac Wanderer',
                     'log.deckEmpty': '{who}: deck is empty, cannot draw.',
                     'log.handFull': '{who} hand is full — {name} is burned.',
                     'log.aiAvaSkill': '✨ AI\'s Ava activates skill: creatures cost 0 this turn!',
@@ -1663,6 +1695,29 @@
                     'log.mustClear': 'Clear all enemy creatures before attacking the hero!',
                     'log.tyrantHitFace': '{who} Jungle Tyrant hits the hero for {p} (attack #{n})',
                     'log.tyrantHitCreature': '{who} Jungle Tyrant hits {name} for {p} (EX takes no retaliation)',
+                    'log.wandererNeed': 'Summoning Amnesiac Wanderer requires 1 friendly creature costing exactly 4!',
+                    'log.wandererPick': 'Tap 1 friendly creature costing exactly 4 as tribute to summon Amnesiac Wanderer.',
+                    'log.wandererInvalid': '{name} is not valid: Amnesiac Wanderer needs a creature costing exactly 4.',
+                    'log.exSummonWanderer': '✨ {who} summoned Amnesiac Wanderer! (PWR 4, discards to copy an enemy creature)',
+                    'log.wandererNotSummoned': 'Amnesiac Wanderer is not summoned yet!',
+                    'log.wandererSkillUsed': 'Amnesiac Wanderer\'s skill was already used this turn.',
+                    'log.wandererNoTarget': 'No enemy creatures to copy!',
+                    'log.wandererPickDiscard': 'Tap a hand card to discard, then copy 1 enemy creature (tap the skill again to cancel)',
+                    'log.wandererDiscard': '{who} discarded {name} to activate Amnesiac Wanderer\'s skill!',
+                    'log.wandererPickCopy': 'Tap 1 enemy creature to copy its stats and ability.',
+                    'log.wandererCopy': '🌀 {who} Amnesiac Wanderer copied {name}: PWR becomes {p} and gains its ability!',
+                    'log.wandererHeroWake': '🌀 Copied Legendary Hero: Amnesiac Wanderer wakes up immediately!',
+                    'log.wandererCancel': 'Amnesiac Wanderer\'s copy cancelled.',
+                    'log.exReaderDone': '{name} scouted 4 cards and took the spell(s).',
+                    'log.exNoAttack': 'EX card cannot attack this turn (sleeping or already attacked).',
+                    'log.exHitFace': '{who} {name} hits the hero for {p}',
+                    'log.exHitCreature': '{who} {name} hits {target} for {p} (EX takes no retaliation)',
+                    'log.exRetaliate': '{who} {name} attacks EX card {ex}: EX is indestructible in battle — {name} takes {p} retaliation damage',
+                    'log.exNoHp': '{name} is an EX card with no HP — that effect does nothing.',
+                    'log.exNoPotion': 'EX cards have no HP — cannot attach Health Potion.',
+                    'log.exNovaImmune': '{name} is an EX card — unaffected by that damage.',
+                    'log.exUndying': '🐉 Undying power awakens! {name} returns to the EX deck with PWR 8!',
+                    'log.exDestroyed': '✨ {who} EX card {name} was destroyed by {card} and returns to the EX deck (can be summoned again).',
                     'log.spellNeed2': 'Not enough mana — 2 mana needed to activate spells!',
                     'log.spellActivated': 'Spent 2 mana to activate spells in hand!',
                     'log.aiSpellActivated': 'AI spent 2 mana to activate spells!',
@@ -1716,7 +1771,8 @@
                     'hint.pickOwn': '> Choose one of your creatures as the target',
                     'hint.pickEnemy': '> Choose an enemy creature as the target',
                     'hint.tyrantSac': '> 🌿 Sacrifice 1 friendly creature: Tyrant +1 power & +1 attack',
-                    'hint.tyrantAttack': '> 🌿 Tyrant strikes: target an enemy creature, or the hero once clear',
+                    'hint.tyrantAttack': '> ✨ EX attack: target an enemy creature, or the hero once the field is clear',
+                    'hint.wandererCopy': '> 🌀 Tap 1 enemy creature to copy its stats and ability',
                     'hint.attack': '> Target an enemy creature, or the hero once the field is clear',
                     'hint.discard': '> Tap a hand card to discard for +2 mana',
                     'hint.avaActive': '> ✨ Ava skill active! Creatures cost 0',
@@ -1762,16 +1818,18 @@
                         '<h3>◆ 4. 战斗规则</h3>',
                         '<p>点击一只未沉睡、本回合尚未攻击的己方生物，再选择敌方生物进行攻击。每只生物每回合通常只能攻击1次。</p>',
                         '<p>敌方场上还有生物时，不能直接攻击敌方英雄；清空敌方场上生物后，才能攻击本体。</p>',
-                        '<p>生物战斗时，双方按攻击力互相造成伤害；生命值降至0或以下时进入墓地。EX卡没有生命值，不会受到普通反击伤害。</p>',
+                        '<p>生物战斗时，双方按攻击力互相造成伤害；生命值降至0或以下时进入墓地。EX卡不会被战斗所破坏：生物攻击EX时EX不受伤害，攻击方会受到EX攻击力的反击伤害；EX攻击生物时也不会受到反击。</p>',
                         '<h3>◆ 5. 英雄技能</h3>',
                         '<p>英雄技能每回合最多使用1次，所有英雄技能统一消耗 <b>6点法力</b>。</p>',
                         '<p><b>空白英雄</b>：生命30，无技能，适合标准对战。</p>',
                         '<p><b>艾娃</b>：生命20。技能：本回合打出的生物费用变为0。</p>',
                         '<p><b>波斯卡</b>：生命25。技能：在己方场上尽可能多地召唤2/2丛林生灵，直到达到战场上限。</p>',
                         '<h3>◆ 6. EX卡</h3>',
-                        '<p>双方各有一个独立EX牌库，每场对局最多召唤 <b>1</b> 张EX卡。召唤后，对应的EX操作会显示在主控制区。</p>',
+                        '<p>双方各有一个独立EX牌库，场上最多同时存在 <b>1</b> 张EX卡。召唤后，对应的EX操作会显示在主控制区。</p>',
+                        '<p>EX卡没有生命值、不会被战斗破坏，但会被法术、道具、事件影响：消灭类效果（如火球术）可以破坏EX卡并使其返回EX牌库（满足祭品条件后可再次召唤）；增益攻击力的法术和道具对EX有效；伤害与生命类效果对EX无效。EX卡每回合可攻击1次（召唤当回合休眠），可攻击对方生物或直接攻击对方玩家。</p>',
                         '<p><b>赛博天使</b>：献祭2只己方生物召唤。技能：丢弃1张手牌，为己方所有生物施加仅用于战斗的护盾。</p>',
-                        '<p><b>密林暴君</b>：献祭1只4费及以下的己方生物召唤。每次献祭己方生物，本回合数值+1（最高9）并获得1次攻击次数；回合结束时恢复为初始数值5。</p>',
+                        '<p><b>密林暴君</b>：献祭1只4费及以下的己方生物召唤。每次献祭己方生物，本回合数值+1（最高9）并获得1次额外攻击次数；回合结束时恢复为初始数值5。</p>',
+                        '<p><b>失忆的流浪者</b>：献祭1只恰好4费的己方生物召唤。技能（每回合1次）：丢弃1张手牌，复制对方场上任意1只生物的数值和能力。</p>',
                         '<h3>◆ 7. 模式差异</h3>',
                         '<p><b>人机模式</b>：标准规则，适合熟悉操作。</p>',
                         '<p><b>锦标赛</b>：你和AI都会选择英雄；法术需额外消耗2点法力激活。</p>',
@@ -1801,16 +1859,18 @@
                         '<h3>◆ 4. Combat</h3>',
                         '<p>Tap one of your creatures that is awake and has not attacked this turn, then choose an enemy creature to attack. Each creature usually attacks once per turn.</p>',
                         '<p>You cannot attack the enemy hero while enemy creatures remain; clear them first.</p>',
-                        '<p>In combat, both creatures deal damage equal to their ATK; a creature at 0 HP or less goes to the graveyard. EX cards have no HP and take no normal retaliation damage.</p>',
+                        '<p>In combat, both creatures deal damage equal to their ATK; a creature at 0 HP or less goes to the graveyard. EX cards cannot be destroyed by battle: a creature attacking an EX takes retaliation damage equal to the EX\'s ATK while the EX is unharmed, and an EX attacking a creature takes no retaliation.</p>',
                         '<h3>◆ 5. Hero Skills</h3>',
                         '<p>Each hero skill can be used once per turn and always costs <b>6 mana</b>.</p>',
                         '<p><b>Blank Hero</b>: 30 HP, no skill. Good for standard play.</p>',
                         '<p><b>Ava</b>: 20 HP. Skill: creatures you play this turn cost 0.</p>',
                         '<p><b>Bosca</b>: 25 HP. Skill: summon 2/2 Jungle Sprites until your field is full.</p>',
                         '<h3>◆ 6. EX Cards</h3>',
-                        '<p>Both sides have an independent EX deck; at most <b>1</b> EX card can be summoned per battle. Once summoned, its actions appear in the control bar.</p>',
+                        '<p>Both sides have an independent EX deck; at most <b>1</b> EX card can be on the field at a time. Once summoned, its actions appear in the control bar.</p>',
+                        '<p>EX cards have no HP and cannot be destroyed by battle, but they ARE affected by spells, items and events: destroy effects (e.g. Fireball) destroy an EX and return it to its EX deck (it can be summoned again once the tribute is met); ATK-boosting spells and items work on EX cards; damage and HP effects do nothing. An EX card can attack once per turn (it sleeps on the summon turn), targeting an enemy creature or the enemy hero directly.</p>',
                         '<p><b>Cyber Angel</b>: sacrifice 2 friendly creatures to summon. Skill: discard 1 card to give all your creatures a battle-only shield.</p>',
-                        '<p><b>Jungle Tyrant</b>: sacrifice 1 friendly creature costing 4 or less to summon. Each sacrifice this turn gives +1 power (max 9) and 1 attack charge; it resets to 5 at turn end.</p>',
+                        '<p><b>Jungle Tyrant</b>: sacrifice 1 friendly creature costing 4 or less to summon. Each sacrifice this turn gives +1 power (max 9) and 1 extra attack charge; it resets to 5 at turn end.</p>',
+                        '<p><b>Amnesiac Wanderer</b>: sacrifice 1 friendly creature costing exactly 4 to summon. Skill (once per turn): discard 1 card to copy the stats and ability of any 1 enemy creature.</p>',
                         '<h3>◆ 7. Modes</h3>',
                         '<p><b>VS AI</b>: standard rules — learn the ropes.</p>',
                         '<p><b>Tournament</b>: both sides pick heroes; spells cost +2 mana to activate.</p>',
@@ -2620,8 +2680,23 @@
                     toughness: null,
                     summonCostText: '献祭1只4费及以下的己方生物',
                     summonCostTextEn: 'Sacrifice 1 friendly creature costing 4 or less',
-                    desc: '献祭1只4费及以下的己方生物召唤。不能主动攻击；每献祭1只己方生物，本回合数值+1（最高9）并获得1次攻击次数。回合结束阶段数值重置为5。',
-                    descEn: 'Summon by sacrificing 1 friendly creature costing 4 or less. Cannot attack normally; each friendly creature sacrificed gives +1 power this turn (max 9) and 1 attack charge. Resets to 5 at turn end.'
+                    desc: '献祭1只4费及以下的己方生物召唤。每献祭1只己方生物，本回合数值+1（最高9）并获得1次额外攻击次数。回合结束阶段数值重置为5。',
+                    descEn: 'Summon by sacrificing 1 friendly creature costing 4 or less. Each friendly creature sacrificed gives +1 power this turn (max 9) and 1 extra attack charge. Resets to 5 at turn end.'
+                },
+                {
+                    id: 'ex_amnesiac_wanderer',
+                    name: '失忆的流浪者',
+                    nameEn: 'Amnesiac Wanderer',
+                    type: 'ex',
+                    cost: 0,
+                    power: 4,
+                    basePower: 4,
+                    maxPower: null,
+                    toughness: null,
+                    summonCostText: '献祭1只恰好4费的己方生物',
+                    summonCostTextEn: 'Sacrifice 1 friendly creature costing exactly 4',
+                    desc: '献祭1只恰好4费的己方生物召唤。技能（每回合1次）：丢弃1张手牌，复制对方场上任意1只生物的数值和能力。',
+                    descEn: 'Summon by sacrificing 1 friendly creature costing exactly 4. Skill (once per turn): discard 1 card to copy the stats and ability of any 1 enemy creature.'
                 }
             ];
 
@@ -2747,7 +2822,13 @@
                     skillUsed: false,
                     sacrificeBuff: 0,
                     attackCharges: 0,
-                    attacksUsed: 0
+                    attacksUsed: 0,
+                    sick: false,
+                    attacked: false,
+                    items: [],
+                    copiedTmplId: null,
+                    copiedName: null,
+                    readerUsed: false
                 };
             }
 
@@ -2997,6 +3078,17 @@
                     });
                     updateWeaponMaster(c);
                 });
+                // EX卡附着的道具：仅攻击类增益生效（EX无生命值，生命药水无法附着）
+                var summonedEx = getSummonedEx(getExDeck(who));
+                if (summonedEx) {
+                    (summonedEx.items || []).forEach(function(item) {
+                        if (item.effect === 'growth' || item.effect === 'standard_power') {
+                            summonedEx.power += item.value;
+                            addLog('sys', t('log.itemBuffPow', { item: nm(item), name: nm(summonedEx), v: item.value }));
+                        }
+                    });
+                    updateExCopiedPower(who);
+                }
             }
 
             function processDragonRevive(who) {
@@ -3191,7 +3283,14 @@
             function isValidExSummonSacrifice(creature, exId) {
                 if (!isCreatureLike(creature)) return false;
                 if (exId === 'ex_forest_tyrant') return getCreatureCost(creature) <= 4;
+                if (exId === 'ex_amnesiac_wanderer') return getCreatureCost(creature) === 4;
                 return true;
+            }
+
+            function exSummonLogKeys(exId) {
+                if (exId === 'ex_forest_tyrant') return { need: 'log.tyrantNeed', pick: 'log.tyrantPick', invalid: 'log.tyrantInvalid' };
+                if (exId === 'ex_amnesiac_wanderer') return { need: 'log.wandererNeed', pick: 'log.wandererPick', invalid: 'log.wandererInvalid' };
+                return { need: 'log.angelNeed', pick: 'log.angelPick', invalid: 'log.tyrantInvalid' };
             }
 
             function startExSacrifice(exId) {
@@ -3207,12 +3306,9 @@
                 var validCount = state.field.filter(function(c) {
                     return isValidExSummonSacrifice(c, exId);
                 }).length;
+                var summonKeys = exSummonLogKeys(exId);
                 if (validCount < required) {
-                    if (exId === 'ex_forest_tyrant') {
-                        addLog('sys', t('log.tyrantNeed'));
-                    } else {
-                        addLog('sys', t('log.angelNeed'));
-                    }
+                    addLog('sys', t(summonKeys.need));
                     render();
                     return;
                 }
@@ -3220,11 +3316,7 @@
                 game.exSacrificeCardId = exId;
                 game.exSacrificeSelected = [];
                 game.uiMode = 'ex_sacrifice';
-                if (exId === 'ex_forest_tyrant') {
-                    addLog('ex', t('log.tyrantPick'));
-                } else {
-                    addLog('ex', t('log.angelPick'));
-                }
+                addLog('ex', t(summonKeys.pick));
                 render();
             }
 
@@ -3236,7 +3328,7 @@
                 var creature = state.field.find(function(c) { return c.uid === creatureUid; });
                 if (!creature) return;
                 if (!isValidExSummonSacrifice(creature, exId)) {
-                    addLog('sys', t('log.tyrantInvalid', { name: nm(creature) }));
+                    addLog('sys', t(exSummonLogKeys(exId).invalid, { name: nm(creature) }));
                     render();
                     return;
                 }
@@ -3289,8 +3381,16 @@
                 exData.sacrificeBuff = 0;
                 exData.attackCharges = 0;
                 exData.attacksUsed = 0;
+                exData.sick = !game.isBlitz;
+                exData.attacked = false;
+                exData.items = [];
+                exData.copiedTmplId = null;
+                exData.copiedName = null;
+                exData.readerUsed = false;
                 if (exId === 'ex_forest_tyrant') {
                     addLog('ex', t('log.exSummonTyrant', { who: wn(who) }));
+                } else if (exId === 'ex_amnesiac_wanderer') {
+                    addLog('ex', t('log.exSummonWanderer', { who: wn(who) }));
                 } else {
                     addLog('ex', t('log.exSummonAngel', { who: wn(who) }));
                 }
@@ -3327,40 +3427,60 @@
                 render();
             }
 
-            // ========== 赛博天使技能：弃牌施加护盾 ==========
-            function startExDiscard(who) {
+            // ========== EX弃牌技能：赛博天使护盾 / 失忆的流浪者复制 ==========
+            function startExDiscard(who, exId) {
                 var state = game[who];
-                var exData = getExCardState(who, 'ex_cyber_angel');
+                var exData = getExCardState(who, exId);
+                var isWanderer = (exId === 'ex_amnesiac_wanderer');
                 if (!exData || !exData.summoned) {
-                    addLog('sys', t('log.angelNotSummoned'));
+                    addLog('sys', t(isWanderer ? 'log.wandererNotSummoned' : 'log.angelNotSummoned'));
                     return false;
                 }
                 if (exData.skillUsed) {
-                    addLog('sys', t('log.angelSkillUsed'));
+                    addLog('sys', t(isWanderer ? 'log.wandererSkillUsed' : 'log.angelSkillUsed'));
                     return false;
                 }
                 if (state.hand.length === 0) {
                     addLog('sys', t('log.noHandDiscard'));
                     return false;
                 }
+                if (isWanderer && game[opponentOf(who)].field.length === 0) {
+                    addLog('sys', t('log.wandererNoTarget'));
+                    return false;
+                }
                 game.exDiscardMode = true;
                 game.exDiscardWho = who;
+                game.exDiscardExId = exId;
                 game.uiMode = 'ex_discard';
-                addLog('ex', t('log.angelPickDiscard'));
+                addLog('ex', t(isWanderer ? 'log.wandererPickDiscard' : 'log.angelPickDiscard'));
                 render();
                 return true;
             }
 
             function confirmExDiscard(who, handIndex) {
                 var state = game[who];
-                var exData = getExCardState(who, 'ex_cyber_angel');
                 if (!game.exDiscardMode || game.exDiscardWho !== who) return false;
                 if (handIndex < 0 || handIndex >= state.hand.length) return false;
+                var exId = game.exDiscardExId || 'ex_cyber_angel';
+                var exData = getExCardState(who, exId);
+                if (!exData || !exData.summoned) return false;
 
                 var discarded = state.hand.splice(handIndex, 1)[0];
-                addLog('sys', t('log.angelDiscard', { who: wn(who), name: nm(discarded) }));
                 exData.skillUsed = true;
+                playSfx('discard');
 
+                if (exId === 'ex_amnesiac_wanderer') {
+                    addLog('sys', t('log.wandererDiscard', { who: wn(who), name: nm(discarded) }));
+                    game.exDiscardMode = false;
+                    game.exDiscardWho = null;
+                    game.exDiscardExId = null;
+                    game.uiMode = 'wanderer_copy';
+                    addLog('ex', t('log.wandererPickCopy'));
+                    render();
+                    return true;
+                }
+
+                addLog('sys', t('log.angelDiscard', { who: wn(who), name: nm(discarded) }));
                 var count = 0;
                 state.field.forEach(function(c) {
                     if (!c.shield) {
@@ -3376,6 +3496,7 @@
 
                 game.exDiscardMode = false;
                 game.exDiscardWho = null;
+                game.exDiscardExId = null;
                 game.uiMode = 'idle';
                 render();
                 return true;
@@ -3383,11 +3504,111 @@
 
             function cancelExDiscard() {
                 if (!game.exDiscardMode) return;
+                var exId = game.exDiscardExId || 'ex_cyber_angel';
                 game.exDiscardMode = false;
                 game.exDiscardWho = null;
+                game.exDiscardExId = null;
                 game.uiMode = 'idle';
-                addLog('sys', t('log.angelCancel'));
+                addLog('sys', t(exId === 'ex_amnesiac_wanderer' ? 'log.wandererCancel' : 'log.angelCancel'));
                 render();
+            }
+
+            // ========== 失忆的流浪者：复制对方生物 ==========
+            function confirmWandererCopy(who, targetUid) {
+                if (who === 'player' && game.uiMode !== 'wanderer_copy') return false;
+                var opp = game[opponentOf(who)];
+                var exData = getExCardState(who, 'ex_amnesiac_wanderer');
+                if (!exData || !exData.summoned) return false;
+                var target = opp.field.find(function(c) { return c.uid === targetUid; });
+                if (!target) return false;
+
+                exData.power = target.power;
+                exData.copiedTmplId = target.tmplId || null;
+                exData.copiedName = nm(target);
+                addLog('ex', t('log.wandererCopy', { who: wn(who), name: nm(target), p: exData.power }));
+                if (target.tmplId === 'legend_hero') {
+                    exData.sick = false;
+                    addLog('ex', t('log.wandererHeroWake'));
+                }
+                if (target.tmplId === 'weapon_master') updateExCopiedPower(who);
+                playSfx('ex');
+                if (who === 'player') game.uiMode = 'idle';
+                render();
+                return true;
+            }
+
+            function cancelWandererCopy() {
+                if (game.uiMode !== 'wanderer_copy') return;
+                game.uiMode = 'idle';
+                addLog('sys', t('log.wandererCancel'));
+                render();
+            }
+
+            // 复制的武器大师能力：攻击力 = 己方场上装备道具数 x2（上限8）
+            function updateExCopiedPower(who) {
+                var exData = getSummonedEx(getExDeck(who));
+                if (!exData || exData.copiedTmplId !== 'weapon_master') return;
+                var count = game[who].field.reduce(function(sum, c) { return sum + ((c.items || []).length); }, 0);
+                exData.power = Math.min(count * 2, 8);
+            }
+
+            // 复制的禁书翻阅者能力：1回合1次，消耗2法力检视牌库4张拿法术
+            function useExReader(who) {
+                var state = game[who];
+                var exData = getSummonedEx(getExDeck(who));
+                if (!exData || exData.copiedTmplId !== 'book_reader') return false;
+                if (state.mana < 2) { addLog('sys', t('log.manaNeed2')); return false; }
+                if (exData.readerUsed) { addLog('sys', t('log.readerUsed')); return false; }
+                if (game.deck.length < 4) { addLog('sys', t('log.deckLt4')); return false; }
+
+                state.mana -= 2;
+                exData.readerUsed = true;
+                var revealed = [];
+                for (var i = 0; i < 4; i++) {
+                    if (game.deck.length === 0) break;
+                    revealed.push(game.deck.shift());
+                }
+                var spells = revealed.filter(function(c) { return c.type === 'spell'; });
+                var nonSpells = revealed.filter(function(c) { return c.type !== 'spell'; });
+                spells.forEach(function(c) {
+                    if (state.hand.length < HAND_LIMIT) {
+                        state.hand.push(c);
+                        addLog('legend', t('log.readerFound', { name: nm(c) }));
+                    } else {
+                        game.deck.push(c);
+                        addLog('sys', t('log.readerFull', { name: nm(c) }));
+                    }
+                });
+                nonSpells.forEach(function(c) { game.deck.push(c); });
+                playSfx('reader');
+                addLog('legend', t('log.exReaderDone', { name: nm(exData) }));
+                return true;
+            }
+
+            // ========== EX被效果破坏：返回EX牌库（可再次召唤） ==========
+            function destroyEx(who, exId, sourceName) {
+                var exData = getExCardState(who, exId);
+                if (!exData || !exData.summoned) return false;
+                var exName = nm(exData);
+                if (exData.copiedTmplId === 'legend_dragon' || exData.copiedTmplId === 'dragon_immortal') {
+                    exData.basePower = 8;
+                    addLog('ex', t('log.exUndying', { name: exName }));
+                }
+                exData.summoned = false;
+                exData.skillUsed = false;
+                exData.sick = false;
+                exData.attacked = false;
+                exData.items = [];
+                exData.copiedTmplId = null;
+                exData.copiedName = null;
+                exData.readerUsed = false;
+                exData.sacrificeBuff = 0;
+                exData.attackCharges = 0;
+                exData.attacksUsed = 0;
+                exData.power = exData.basePower;
+                playSfx('destroy');
+                addLog('ex', t('log.exDestroyed', { who: wn(who), name: exName, card: sourceName || '' }));
+                return true;
             }
 
             // ========== 密林暴君：献祭强化与多次攻击 ==========
@@ -3459,13 +3680,17 @@
                 exData.attacksUsed = 0;
             }
 
+            // 所有EX卡每回合可攻击1次（召唤当回合休眠）；密林暴君的献祭充能为额外攻击
             function performExAttack(attackerWho, targetType, targetUid) {
                 var state = game[attackerWho];
                 var opp = game[opponentOf(attackerWho)];
-                var exData = getExCardState(attackerWho, 'ex_forest_tyrant');
+                var exData = getSummonedEx(getExDeck(attackerWho));
                 if (!exData || !exData.summoned) return false;
-                if (getTyrantRemainingAttacks(exData) <= 0) {
-                    if (attackerWho === 'player') addLog('sys', t('log.tyrantNoCharge'));
+                var useCharge = exData.id === 'ex_forest_tyrant' && getTyrantRemainingAttacks(exData) > 0;
+                if (!useCharge && (exData.sick || exData.attacked)) {
+                    if (attackerWho === 'player') {
+                        addLog('sys', t(exData.id === 'ex_forest_tyrant' ? 'log.tyrantNoCharge' : 'log.exNoAttack'));
+                    }
                     return false;
                 }
                 if (targetType === 'face' && opp.field.length > 0) {
@@ -3477,7 +3702,8 @@
                     if (!t0 || t0.sick) return false;
                 }
 
-                exData.attacksUsed++;
+                if (useCharge) exData.attacksUsed++;
+                else exData.attacked = true;
                 playSfx('attack');
                 var whoLabel = wp(attackerWho);
                 var cls = attackerWho === 'player' ? 'me' : 'ai';
@@ -3491,12 +3717,14 @@
                 if (targetType === 'face') {
                     opp.hp -= exData.power;
                     playSfx('damage');
-                    addLog(cls, t('log.tyrantHitFace', { who: whoLabel, p: exData.power, n: exData.attacksUsed }));
+                    if (useCharge) addLog(cls, t('log.tyrantHitFace', { who: whoLabel, p: exData.power, n: exData.attacksUsed }));
+                    else addLog(cls, t('log.exHitFace', { who: whoLabel, name: nm(exData), p: exData.power }));
                 } else if (targetType === 'creature') {
                     var target = opp.field.find(function(c) { return c.uid === targetUid; });
                     if (!target) return false;
                     target.toughness -= exData.power;
-                    addLog(cls, t('log.tyrantHitCreature', { who: whoLabel, name: nm(target), p: exData.power }));
+                    if (useCharge) addLog(cls, t('log.tyrantHitCreature', { who: whoLabel, name: nm(target), p: exData.power }));
+                    else addLog(cls, t('log.exHitCreature', { who: whoLabel, name: nm(exData), target: nm(target), p: exData.power }));
                     removeDeadCreatures(opp);
                 } else {
                     return false;
@@ -3551,7 +3779,14 @@
                 processDragonRevive(who);
 
                 var exDeck = (who === 'player') ? game.playerEx : game.aiEx;
-                exDeck.forEach(function(exData) { exData.skillUsed = false; });
+                exDeck.forEach(function(exData) {
+                    exData.skillUsed = false;
+                    exData.readerUsed = false;
+                    if (exData.summoned) {
+                        exData.sick = false;
+                        exData.attacked = false;
+                    }
+                });
 
                 if (who === 'player') {
                     game.playerHeroUsed = false;
@@ -3566,6 +3801,7 @@
                 if (game.exDiscardMode) {
                     game.exDiscardMode = false;
                     game.exDiscardWho = null;
+                    game.exDiscardExId = null;
                 }
                 if (game.exSacrificeMode) {
                     game.exSacrificeMode = false;
@@ -3722,6 +3958,28 @@
                 var card = state.hand[handIndex];
                 if (!card || card.type !== 'item') return false;
                 if (state.mana < card.cost) return false;
+                // 道具附着到EX卡：攻击类增益生效；EX无生命值，生命药水无法附着
+                if (typeof targetUid === 'string' && targetUid.indexOf('ex:') === 0) {
+                    var exTarget = getExCardState(who, targetUid.slice(3));
+                    if (!exTarget || !exTarget.summoned) return false;
+                    if (exTarget.sick) {
+                        addLog('sys', t('log.sickNoEquip'));
+                        return false;
+                    }
+                    if (card.effect === 'potion_heal') {
+                        addLog('sys', t('log.exNoPotion'));
+                        return false;
+                    }
+                    exTarget.items = exTarget.items || [];
+                    markCardUsed(who, card);
+                    exTarget.items.push({ tmplId: card.tmplId, name: card.name, nameEn: card.nameEn, effect: card.effect, value: card.value });
+                    state.mana -= card.cost;
+                    state.hand.splice(handIndex, 1);
+                    updateExCopiedPower(who);
+                    playSfx('item');
+                    addLog(who === 'player' ? 'me' : 'ai', t('log.equip', { who: wn(who), item: nm(card), name: nm(exTarget) }));
+                    return true;
+                }
                 var target = state.field.find(function(c) { return c.uid === targetUid; });
                 if (!target) return false;
                 if (target.sick) {
@@ -3760,6 +4018,18 @@
                 var card = state.hand[handIndex];
                 if (!card || card.type !== 'spell') return false;
 
+                // 以EX卡为目标：消灭/增益攻击有效；EX无生命值，伤害与生命增益无效
+                var exTargetId = (typeof target === 'string' && target.indexOf('ex:') === 0) ? target.slice(3) : null;
+                if (exTargetId) {
+                    var exCheckOwner = (card.effect === 'destroy_creature') ? opponentOf(who) : who;
+                    var exCheck = getExCardState(exCheckOwner, exTargetId);
+                    if (!exCheck || !exCheck.summoned) return false;
+                    if (card.effect !== 'destroy_creature' && card.effect !== 'buff_power') {
+                        addLog('sys', t('log.exNoHp', { name: nm(exCheck) }));
+                        return false;
+                    }
+                }
+
                 if (game.isTournament) {
                     if (!activateSpell(who, handIndex)) return false;
                 }
@@ -3772,6 +4042,11 @@
                 switch (card.effect) {
                     case 'destroy_creature': {
                         if (!target) return false;
+                        if (exTargetId) {
+                            addLog(cls, t('log.castDestroy', { who: whoLabel, card: nm(card), name: nm(getExCardState(opponentOf(who), exTargetId)) }));
+                            destroyEx(opponentOf(who), exTargetId, nm(card));
+                            break;
+                        }
                         var idx = opp.field.findIndex(function(c) { return c.uid === target; });
                         if (idx < 0) return false;
                         var dead = opp.field[idx];
@@ -3823,6 +4098,13 @@
                     }
                     case 'buff_power': {
                         if (!target) return false;
+                        if (exTargetId) {
+                            var exBuff = getExCardState(who, exTargetId);
+                            if (!exBuff || !exBuff.summoned) return false;
+                            exBuff.power += card.value;
+                            addLog(cls, t('log.castBuffP', { who: whoLabel, card: nm(card), name: nm(exBuff), v: card.value }));
+                            break;
+                        }
                         var t3 = state.field.find(function(c) { return c.uid === target; });
                         if (!t3) return false;
                         t3.power += card.value;
@@ -3832,6 +4114,8 @@
                     case 'damage_all_enemy_creatures': {
                         opp.field.forEach(function(c) { c.toughness -= card.value; });
                         addLog(cls, t('log.castNova', { who: whoLabel, card: nm(card), v: card.value }));
+                        var oppEx = getSummonedEx(getExDeck(opponentOf(who)));
+                        if (oppEx) addLog('sys', t('log.exNovaImmune', { name: nm(oppEx) }));
                         removeDeadCreatures(opp);
                         break;
                     }
@@ -4007,6 +4291,10 @@
                     var t0 = opp.field.find(function(c) { return c.uid === targetUid; });
                     if (!t0 || t0.sick) return false;
                 }
+                if (targetType === 'ex') {
+                    var exCheck = getExCardState(opponentOf(attackerWho), targetUid);
+                    if (!exCheck || !exCheck.summoned) return false;
+                }
 
                 attacker.attacked = true;
                 playSfx('attack');
@@ -4022,6 +4310,13 @@
                     opp.hp -= attacker.power;
                     playSfx('damage');
                     addLog(cls, t('log.attackFace', { who: whoLabel, name: nm(attacker), p: attacker.power }));
+                } else if (targetType === 'ex') {
+                    // EX卡不会被战斗所破坏：EX无伤，攻击方受到EX攻击力的反击伤害
+                    var exTarget = getExCardState(opponentOf(attackerWho), targetUid);
+                    if (!exTarget) return false;
+                    attacker.toughness -= exTarget.power;
+                    addLog(cls, t('log.exRetaliate', { who: whoLabel, name: nm(attacker), ex: nm(exTarget), p: exTarget.power }));
+                    removeDeadCreatures(state);
                 } else if (targetType === 'creature') {
                     var target = opp.field.find(function(c) { return c.uid === targetUid; });
                     if (!target) return false;
@@ -4053,16 +4348,31 @@
                 }).sort(function(a, b) {
                     return aiThreatValue(a) - aiThreatValue(b);
                 });
+                var wandererOptions = exSacrificePool.filter(function(c) {
+                    return isValidExSummonSacrifice(c, 'ex_amnesiac_wanderer');
+                }).sort(function(a, b) {
+                    return aiThreatValue(a) - aiThreatValue(b);
+                });
                 var canTyrant = tyrantOptions.length > 0 && exSacrificePool.length >= 2;
                 var canCyber = exSacrificePool.length >= 2;
+                var canWanderer = wandererOptions.length > 0;
                 var enemyThreat = player.field.reduce(function(max, c) {
                     return Math.max(max, aiThreatValue(c));
                 }, 0);
+                var bestCopyPower = player.field.reduce(function(max, c) {
+                    return Math.max(max, c.power || 0);
+                }, 0);
                 var wantTyrant = canTyrant && (ai.field.length >= 3 || player.hp <= 12 || level >= 6);
                 var wantCyber = canCyber && (ai.field.length >= 3 || ai.hp <= 15 || enemyThreat >= 16 || level >= 6);
+                var wantWanderer = canWanderer && (bestCopyPower >= 6 || (level >= 6 && bestCopyPower >= 4));
 
                 if (wantTyrant) {
                     performExSummon('ai', 'ex_forest_tyrant', [tyrantOptions[0].uid]);
+                    render();
+                    return getSummonedEx(game.aiEx);
+                }
+                if (wantWanderer) {
+                    performExSummon('ai', 'ex_amnesiac_wanderer', [wandererOptions[0].uid]);
                     render();
                     return getSummonedEx(game.aiEx);
                 }
@@ -4076,6 +4386,11 @@
                 }
                 if (canTyrant && level >= 4) {
                     performExSummon('ai', 'ex_forest_tyrant', [tyrantOptions[0].uid]);
+                    render();
+                    return getSummonedEx(game.aiEx);
+                }
+                if (canWanderer && level >= 5 && bestCopyPower >= 4) {
+                    performExSummon('ai', 'ex_amnesiac_wanderer', [wandererOptions[0].uid]);
                     render();
                     return getSummonedEx(game.aiEx);
                 }
@@ -4167,21 +4482,54 @@
                 if (desired > 0) render();
             }
 
-            function aiAttackWithTyrant() {
+            function aiUseWandererSkill() {
+                var ai = game.ai;
                 var player = game.player;
-                var exData = getExCardState('ai', 'ex_forest_tyrant');
+                var exData = getExCardState('ai', 'ex_amnesiac_wanderer');
+                if (!exData || !exData.summoned || exData.skillUsed) return;
+                if (ai.hand.length === 0 || player.field.length === 0) return;
+                var discardIdx = aiWeakestHandIndex(ai);
+                if (discardIdx < 0) return;
+                var discarded = ai.hand.splice(discardIdx, 1)[0];
+                exData.skillUsed = true;
+                playSfx('discard');
+                addLog('sys', t('log.wandererDiscard', { who: t('misc.ai'), name: nm(discarded) }));
+                var target = player.field.slice().sort(function(a, b) {
+                    return (b.power - a.power) || (aiThreatValue(b) - aiThreatValue(a));
+                })[0];
+                confirmWandererCopy('ai', target.uid);
+            }
+
+            function aiAttackWithEx() {
+                var player = game.player;
+                var exData = getSummonedEx(game.aiEx);
                 if (!exData || !exData.summoned) return;
-                while (!game.over && getTyrantRemainingAttacks(exData) > 0) {
-                    var targets = player.field.filter(function(t) { return !t.sick; });
-                    if (targets.length > 0) {
-                        var killable = targets.filter(function(t) { return exData.power >= t.toughness; })
+                // 密林暴君的献祭充能攻击
+                if (exData.id === 'ex_forest_tyrant') {
+                    while (!game.over && getTyrantRemainingAttacks(exData) > 0) {
+                        var targets = player.field.filter(function(t) { return !t.sick; });
+                        if (targets.length > 0) {
+                            var killable = targets.filter(function(t) { return exData.power >= t.toughness; })
+                                .sort(function(a, b) { return aiThreatValue(b) - aiThreatValue(a); });
+                            var target = killable[0] || targets.slice().sort(function(a, b) { return aiThreatValue(b) - aiThreatValue(a); })[0];
+                            if (!performExAttack('ai', 'creature', target.uid)) break;
+                        } else if (player.field.length === 0) {
+                            if (!performExAttack('ai', 'face', null)) break;
+                        } else {
+                            break;
+                        }
+                    }
+                }
+                // 所有EX卡的每回合普通攻击
+                if (!game.over && !exData.sick && !exData.attacked) {
+                    var normalTargets = player.field.filter(function(t) { return !t.sick; });
+                    if (normalTargets.length > 0) {
+                        var normalKillable = normalTargets.filter(function(t) { return exData.power >= t.toughness; })
                             .sort(function(a, b) { return aiThreatValue(b) - aiThreatValue(a); });
-                        var target = killable[0] || targets.slice().sort(function(a, b) { return aiThreatValue(b) - aiThreatValue(a); })[0];
-                        if (!performExAttack('ai', 'creature', target.uid)) break;
+                        var normalTarget = normalKillable[0] || normalTargets.slice().sort(function(a, b) { return aiThreatValue(b) - aiThreatValue(a); })[0];
+                        performExAttack('ai', 'creature', normalTarget.uid);
                     } else if (player.field.length === 0) {
-                        if (!performExAttack('ai', 'face', null)) break;
-                    } else {
-                        break;
+                        performExAttack('ai', 'face', null);
                     }
                 }
             }
@@ -4292,13 +4640,19 @@
                 var enemyThreats = player.field.slice().sort(function(a, b) { return aiThreatValue(b) - aiThreatValue(a); });
                 var topThreat = enemyThreats[0] || null;
                 var readyAttackers = ai.field.filter(function(c) { return !c.sick && !c.attacked; });
+                var playerSummonedEx = getSummonedEx(game.playerEx);
 
                 ai.hand.forEach(function(card, idx) {
                     if (card.type !== 'spell' || !aiCanAffordCard(ai, card)) return;
                     var value = card.value || 0;
                     if (card.effect === 'destroy_creature' && topThreat) {
                         consider(idx, topThreat.uid, 72 + aiThreatValue(topThreat) + (topThreat.shield ? 8 : 0));
-                    } else if (card.effect === 'damage_creature' && topThreat) {
+                    }
+                    if (card.effect === 'destroy_creature' && playerSummonedEx) {
+                        // 消灭类法术可以破坏EX卡（返回对方EX牌库）
+                        consider(idx, 'ex:' + playerSummonedEx.id, 66 + (playerSummonedEx.power || 0) * 4);
+                    }
+                    if (card.effect === 'damage_creature' && topThreat) {
                         var killTarget = enemyThreats.find(function(t) { return value >= t.toughness; }) || topThreat;
                         var priority = value >= killTarget.toughness ? 68 + aiThreatValue(killTarget) : 28 + aiThreatValue(killTarget);
                         consider(idx, killTarget.uid, priority);
@@ -4423,6 +4777,7 @@
                 } else if (summonedAiEx && summonedAiEx.id === 'ex_forest_tyrant') {
                     aiEmpowerTyrant();
                 }
+                aiUseWandererSkill();
 
                 if (isDragon) useDragonSkill();
 
@@ -4438,6 +4793,15 @@
                     });
                     if (reader && (level >= 3 || ai.hand.length <= 3)) {
                         useReader('ai', reader.uid);
+                        actedSomething = true;
+                        render();
+                        continue;
+                    }
+
+                    var aiExReader = getSummonedEx(game.aiEx);
+                    if (aiExReader && aiExReader.copiedTmplId === 'book_reader' && !aiExReader.readerUsed && ai.mana >= 2 &&
+                        (level >= 3 || ai.hand.length <= 3)) {
+                        useExReader('ai');
                         actedSomething = true;
                         render();
                         continue;
@@ -4522,7 +4886,7 @@
                     performAttack('ai', stillAlive.uid, choice.type, choice.uid);
                 });
 
-                aiAttackWithTyrant();
+                aiAttackWithEx();
 
                 render();
                 if (!game.over) {
@@ -4565,6 +4929,11 @@
                     statusList.push(t('cd.buff', { n: (card.sacrificeBuff || 0) }));
                     statusList.push(t('cd.attacksLeft', { n: getTyrantRemainingAttacks(card) }));
                 }
+                if (card.type === 'ex' && card.copiedName) {
+                    statusList.push(t('cd.copied') + card.copiedName);
+                    var copiedTmpl = card.copiedTmplId ? getTemplate(card.copiedTmplId) : null;
+                    if (copiedTmpl && lg(copiedTmpl) && !legend) legend = lg(copiedTmpl);
+                }
                 if (statusList.length > 0) {
                     statsHtml += '<div class="cd-line">' + t('cd.status') + '<b>' + listJoin(statusList) + '</b></div>';
                 }
@@ -4592,12 +4961,30 @@
                     html += '<button id="card-detail-action" class="legend-btn" ' + (disabled ? 'disabled' : '') + '>' + btnText + '</button>';
                 }
 
+                // 流浪者复制了禁书翻阅者：EX卡也可使用翻阅能力
+                var playerSummonedEx = (game && game.player) ? getSummonedEx(game.playerEx) : null;
+                var canShowExReaderAction = playerSummonedEx && card === playerSummonedEx && card.copiedTmplId === 'book_reader' &&
+                    game.turn === 'player' && !game.over;
+                if (canShowExReaderAction) {
+                    var exDisabled = playerSummonedEx.readerUsed || game.player.mana < 2;
+                    var exBtnText = playerSummonedEx.readerUsed ? t('cd.readerUsed') : t('cd.readerAction');
+                    html += '<button id="card-detail-action" class="legend-btn" ' + (exDisabled ? 'disabled' : '') + '>' + exBtnText + '</button>';
+                }
+
                 $('card-detail-inner').innerHTML = html;
                 var actionBtn = $('card-detail-action');
                 if (actionBtn && fieldCard) {
                     actionBtn.onclick = function(e) {
                         e.stopPropagation();
                         if (useReader('player', fieldCard.uid)) {
+                            hideCardDetailModal();
+                            render();
+                        }
+                    };
+                } else if (actionBtn && canShowExReaderAction) {
+                    actionBtn.onclick = function(e) {
+                        e.stopPropagation();
+                        if (useExReader('player')) {
                             hideCardDetailModal();
                             render();
                         }
@@ -4773,6 +5160,42 @@
                     slot.className = 'ex-slot has-card';
                     var cardDiv = cardEl(summonedEx, {});
                     cardDiv.querySelector('.cost').textContent = 'EX';
+
+                    // EX卡可被攻击、被法术/道具指定为目标
+                    var exClickHandler = null;
+                    if (game.turn === 'player' && !game.over) {
+                        if (!isPlayer && game.uiMode === 'attacking' && game.selectedAttackerUid) {
+                            exClickHandler = function() {
+                                performAttack('player', game.selectedAttackerUid, 'ex', summonedEx.id);
+                                game.uiMode = 'idle';
+                                game.selectedAttackerUid = null;
+                                render();
+                            };
+                        } else if (!isPlayer && game.uiMode === 'targeting' && game.pendingAction && game.pendingAction.kind === 'enemy-creature') {
+                            exClickHandler = function() {
+                                castSpell('player', game.pendingAction.handIndex, 'ex:' + summonedEx.id);
+                                game.uiMode = 'idle';
+                                game.pendingAction = null;
+                                render();
+                            };
+                        } else if (isPlayer && game.uiMode === 'targeting' && game.pendingAction && game.pendingAction.kind === 'own-creature') {
+                            exClickHandler = function() {
+                                if (game.pendingAction.mode === 'item') {
+                                    attachItem('player', game.pendingAction.handIndex, 'ex:' + summonedEx.id);
+                                } else {
+                                    castSpell('player', game.pendingAction.handIndex, 'ex:' + summonedEx.id);
+                                }
+                                game.uiMode = 'idle';
+                                game.pendingAction = null;
+                                render();
+                            };
+                        }
+                    }
+                    if (exClickHandler) {
+                        cardDiv.style.outline = '2px solid var(--red)';
+                        cardDiv.style.cursor = 'pointer';
+                        cardDiv.onclick = exClickHandler;
+                    }
                     slot.appendChild(cardDiv);
 
                     var status = document.createElement('div');
@@ -4780,7 +5203,9 @@
                     if (summonedEx.id === 'ex_forest_tyrant') {
                         status.textContent = t('exui.tyrantStatus', { b: (summonedEx.sacrificeBuff || 0), n: getTyrantRemainingAttacks(summonedEx) });
                     } else {
-                        status.textContent = summonedEx.skillUsed ? t('exui.skillUsed') : t('exui.skillReady');
+                        var exStatusText = summonedEx.skillUsed ? t('exui.skillUsed') : t('exui.skillReady');
+                        if (summonedEx.copiedName) exStatusText += '｜' + t('cd.copied') + summonedEx.copiedName;
+                        status.textContent = exStatusText;
                     }
                     slot.appendChild(status);
                     return;
@@ -4835,22 +5260,38 @@
                     return;
                 }
 
+                // 技能按钮：各EX卡专属技能
                 if (summonedEx.id === 'ex_cyber_angel') {
-                    if (summonedEx.skillUsed) return;
-                    var isDiscardMode = (game.exDiscardMode && game.exDiscardWho === 'player');
-                    mainBtn.hidden = false;
-                    mainBtn.textContent = isDiscardMode ? t('exui.cancelAngel') : t('exui.angelSkill');
-                    mainBtn.onclick = function() {
-                        if (game.exDiscardMode && game.exDiscardWho === 'player') {
-                            cancelExDiscard();
-                        } else {
-                            startExDiscard('player');
-                        }
-                    };
-                    return;
-                }
-
-                if (summonedEx.id === 'ex_forest_tyrant') {
+                    if (!summonedEx.skillUsed) {
+                        var isDiscardMode = (game.exDiscardMode && game.exDiscardWho === 'player');
+                        mainBtn.hidden = false;
+                        mainBtn.textContent = isDiscardMode ? t('exui.cancelAngel') : t('exui.angelSkill');
+                        mainBtn.onclick = function() {
+                            if (game.exDiscardMode && game.exDiscardWho === 'player') {
+                                cancelExDiscard();
+                            } else {
+                                startExDiscard('player', 'ex_cyber_angel');
+                            }
+                        };
+                    }
+                } else if (summonedEx.id === 'ex_amnesiac_wanderer') {
+                    if (game.uiMode === 'wanderer_copy') {
+                        mainBtn.hidden = false;
+                        mainBtn.textContent = t('exui.cancelCopy');
+                        mainBtn.onclick = function() { cancelWandererCopy(); };
+                    } else if (!summonedEx.skillUsed) {
+                        var isWandererDiscard = (game.exDiscardMode && game.exDiscardWho === 'player');
+                        mainBtn.hidden = false;
+                        mainBtn.textContent = isWandererDiscard ? t('exui.cancelWanderer') : t('exui.wandererSkill');
+                        mainBtn.onclick = function() {
+                            if (game.exDiscardMode && game.exDiscardWho === 'player') {
+                                cancelExDiscard();
+                            } else {
+                                startExDiscard('player', 'ex_amnesiac_wanderer');
+                            }
+                        };
+                    }
+                } else if (summonedEx.id === 'ex_forest_tyrant') {
                     if (game.uiMode === 'tyrant_sacrifice') {
                         mainBtn.hidden = false;
                         mainBtn.textContent = t('exui.cancelSacrifice');
@@ -4860,18 +5301,21 @@
                         mainBtn.textContent = t('exui.sacrificeBuff');
                         mainBtn.onclick = function() { startTyrantSacrifice(); };
                     }
+                }
 
-                    var remaining = getTyrantRemainingAttacks(summonedEx);
-                    if (remaining > 0) {
-                        altBtn.hidden = false;
-                        altBtn.textContent = game.uiMode === 'ex_attacking' ? t('exui.cancelExAttack') : t('exui.exAttack', { n: remaining });
-                        altBtn.onclick = function() {
-                            game.uiMode = (game.uiMode === 'ex_attacking') ? 'idle' : 'ex_attacking';
-                            game.selectedAttackerUid = null;
-                            game.pendingAction = null;
-                            render();
-                        };
-                    }
+                // 攻击按钮：所有EX卡每回合1次普通攻击；暴君的献祭充能为额外攻击
+                var exNormalAvail = (!summonedEx.sick && !summonedEx.attacked) ? 1 : 0;
+                var exCharges = (summonedEx.id === 'ex_forest_tyrant') ? getTyrantRemainingAttacks(summonedEx) : 0;
+                var exTotalAttacks = exNormalAvail + exCharges;
+                if (exTotalAttacks > 0) {
+                    altBtn.hidden = false;
+                    altBtn.textContent = game.uiMode === 'ex_attacking' ? t('exui.cancelExAttack') : t('exui.exAttack', { n: exTotalAttacks });
+                    altBtn.onclick = function() {
+                        game.uiMode = (game.uiMode === 'ex_attacking') ? 'idle' : 'ex_attacking';
+                        game.selectedAttackerUid = null;
+                        game.pendingAction = null;
+                        render();
+                    };
                 }
             }
 
@@ -4944,12 +5388,13 @@
                     var isSpellTarget = game.uiMode === 'targeting' && game.pendingAction && game.pendingAction
                         .kind === 'enemy-creature';
                     var isAttackTarget = (game.uiMode === 'attacking' || game.uiMode === 'ex_attacking') && !c.sick;
+                    var isWandererCopyTarget = game.uiMode === 'wanderer_copy';
                     var el = cardEl({ name: c.name, nameEn: c.nameEn, type: c.type || 'creature', power: c.power, toughness: c
                             .toughness, cost: c.cost, legend: c.legend, legendEn: c.legendEn, tmplId: c.tmplId, shield: c.shield,
                         sick: c.sick, attacked: c.attacked, items: c.items, owner: c.owner },
                         { sick: c.sick, items: c.items });
                     el.querySelector('.cost').textContent = '';
-                    if (isSpellTarget || isAttackTarget) {
+                    if (isSpellTarget || isAttackTarget || isWandererCopyTarget) {
                         el.style.outline = '1px solid var(--red)';
                         el.onclick = function() {
                             if (game.uiMode === 'targeting') {
@@ -4966,6 +5411,8 @@
                                 performExAttack('player', 'creature', c.uid);
                                 game.uiMode = 'idle';
                                 render();
+                            } else if (game.uiMode === 'wanderer_copy') {
+                                confirmWandererCopy('player', c.uid);
                             }
                         };
                     }
@@ -5089,13 +5536,13 @@
                                 0;
                             var needsOwnTarget = ['buff_power', 'buff_toughness'].indexOf(card.effect) >= 0;
                             if (needsEnemyTarget) {
-                                if (game.ai.field.length === 0) { addLog('sys', t('log.noEnemyTarget'));
+                                if (game.ai.field.length === 0 && !getSummonedEx(game.aiEx)) { addLog('sys', t('log.noEnemyTarget'));
                                     render(); return; }
                                 game.uiMode = 'targeting';
                                 game.pendingAction = { handIndex: idx, kind: 'enemy-creature', mode: 'spell' };
                                 render();
                             } else if (needsOwnTarget) {
-                                if (game.player.field.length === 0) { addLog('sys', t('log.noOwnTarget'));
+                                if (game.player.field.length === 0 && !getSummonedEx(game.playerEx)) { addLog('sys', t('log.noOwnTarget'));
                                     render(); return; }
                                 game.uiMode = 'targeting';
                                 game.pendingAction = { handIndex: idx, kind: 'own-creature', mode: 'spell' };
@@ -5110,7 +5557,7 @@
                         }
 
                         if (card.type === 'item') {
-                            if (game.player.field.length === 0) { addLog('sys', t('log.noEquipTarget', { name: nm(card) }));
+                            if (game.player.field.length === 0 && !getSummonedEx(game.playerEx)) { addLog('sys', t('log.noEquipTarget', { name: nm(card) }));
                                 render(); return; }
                             game.uiMode = 'targeting';
                             game.pendingAction = { handIndex: idx, kind: 'own-creature', mode: 'item' };
@@ -5143,6 +5590,8 @@
                     hint = t('hint.exSacrifice', { name: (exTemplate ? nm(exTemplate) : 'EX'), n: exNeed });
                 } else if (game.exDiscardMode && game.exDiscardWho === 'player') {
                     hint = t('hint.exDiscard');
+                } else if (game.uiMode === 'wanderer_copy') {
+                    hint = t('hint.wandererCopy');
                 } else if (game.turn !== 'player') {
                     hint = t('hint.aiThinking');
                 } else if (game.uiMode === 'targeting') {

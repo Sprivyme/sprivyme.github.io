@@ -192,6 +192,10 @@
   .card:hover{transform:translateY(-10px); border-color:var(--ink);}
   .card.disabled{opacity:0.35; cursor:not-allowed;}
   .card.disabled:hover{transform:none; border-color:var(--line);}
+  .card.selected{
+    border-color:var(--ink); transform:translateY(-10px);
+    box-shadow:0 0 20px rgba(255,255,255,0.14);
+  }
   .card .suit{font-size:1.9em;}
   .card .value{font-family:var(--mono); font-size:1.1em; letter-spacing:0.05em;}
   .card .desc{font-family:var(--mono); font-size:0.58em; color:var(--ink-dim); text-align:center; line-height:1.3;}
@@ -201,6 +205,39 @@
   .card.suit-club .suit,.card.suit-club .value{color:var(--club);}
 
   .battle-actions{display:flex; gap:1em; margin-top:0.4em;}
+
+  /* ---------- CARD SELECTION INFO PANEL ---------- */
+  .card-select-panel{
+    position:fixed; right:14px; top:50%; transform:translateY(-50%);
+    width:min(240px, 42vw); max-height:76vh; overflow-y:auto;
+    background:var(--panel); border:1px solid var(--line); border-radius:10px;
+    padding:1.3em 1.1em; z-index:30; display:none;
+    box-shadow:0 0 40px rgba(255,255,255,0.05);
+  }
+  .card-select-panel.active{display:block;}
+  .csp-suit{font-size:1.6em; margin-bottom:0.15em;}
+  .csp-name{font-size:1.1em; letter-spacing:0.1em; margin-bottom:0.15em;}
+  .csp-type{font-family:var(--mono); font-size:0.7em; color:var(--ink-dim); margin-bottom:0.8em; letter-spacing:0.05em;}
+  .csp-desc{font-size:0.88em; line-height:1.5; margin-bottom:1em;}
+  .csp-divider{height:1px; background:var(--line); margin:0.9em 0;}
+  .csp-combo-title{
+    font-family:var(--mono); font-size:0.65em; letter-spacing:0.15em; color:var(--ink-dim);
+    text-transform:uppercase; margin-bottom:0.7em;
+  }
+  .csp-combo-item{margin-bottom:0.7em; padding:0.6em 0.7em; border:1px solid var(--line); border-radius:6px;}
+  .csp-combo-item:last-child{margin-bottom:0;}
+  .csp-combo-pair{font-family:var(--mono); font-size:0.62em; color:var(--ink-dim); margin-bottom:0.3em;}
+  .csp-combo-name{font-size:0.86em; color:var(--diamond); margin-bottom:0.25em;}
+  .csp-combo-effect{font-family:var(--mono); font-size:0.65em; color:var(--ink-dim); line-height:1.4;}
+  .csp-combo-empty{font-family:var(--mono); font-size:0.68em; color:var(--ink-dim); opacity:0.6;}
+  /* combo entries become clickable actions once a real partner card is found in hand */
+  .csp-combo-item.playable{cursor:pointer; border-color:var(--diamond); transition:background 0.15s, transform 0.1s;}
+  .csp-combo-item.playable:hover{background:rgba(212,175,55,0.08);}
+  .csp-combo-item.playable:active{transform:scale(0.98);}
+  .csp-combo-item.playable.disabled{cursor:not-allowed; opacity:0.45; border-color:var(--line);}
+  .csp-combo-item.playable.disabled:hover{background:none;}
+  .csp-actions{display:flex; gap:0.6em; margin-top:1.2em;}
+  .csp-actions .btn{flex:1; padding:0.65em 0.4em; font-size:0.72em;}
 
   .teach-tip{
     position:absolute; bottom:190px; left:50%; transform:translateX(-50%);
@@ -223,6 +260,9 @@
 
   /* ---------- ALBUM ---------- */
   #screen-album{align-items:center; justify-content:flex-start; padding-top:8vh;}
+  .album-back-btn{
+    position:absolute; top:14px; left:14px; padding:0.55em 1.1em; font-size:0.72em; z-index:6;
+  }
   .album-header{text-align:center; margin-bottom:0.4em;}
   .album-header h2{font-size:1.7em; letter-spacing:0.3em; font-weight:400; margin:0;}
   .album-count{font-family:var(--mono); color:var(--ink-dim); font-size:0.8em; letter-spacing:0.1em; margin-top:0.3em;}
@@ -264,6 +304,43 @@
   }
   .sound-toggle:hover{border-color:var(--ink); color:var(--ink);}
   .sound-toggle.muted{opacity:0.4;}
+
+  /* ---------- TOP-RIGHT MENU BUTTON ---------- */
+  .menu-toggle{
+    position:fixed; top:14px; right:58px; z-index:20;
+    width:34px; height:34px; border-radius:50%; border:1px solid var(--line);
+    background:rgba(13,13,13,0.6); color:var(--ink-dim); font-family:var(--mono);
+    font-size:0.95em; display:flex; align-items:center; justify-content:center;
+    cursor:pointer; transition:all .2s ease; touch-action:manipulation;
+    -webkit-tap-highlight-color:transparent; -webkit-user-select:none; user-select:none;
+  }
+  .menu-toggle:hover{border-color:var(--ink); color:var(--ink);}
+
+  #menu-overlay{
+    position:fixed; inset:0; z-index:110; display:none;
+    align-items:center; justify-content:center;
+    background:rgba(0,0,0,0.86);
+    backdrop-filter:blur(2px);
+    animation:cd-fade-in .22s ease;
+    cursor:pointer;
+  }
+  #menu-overlay.active{display:flex;}
+  .menu-panel{
+    width:min(300px, 84vw); background:var(--panel); border:1px solid var(--line);
+    border-radius:10px; padding:2em 1.8em; text-align:center; cursor:default;
+    box-shadow:0 0 60px rgba(255,255,255,0.06);
+    animation:cd-pop-in .28s cubic-bezier(.2,.7,.3,1);
+  }
+  .menu-panel h3{font-size:1.2em; letter-spacing:0.3em; font-weight:400; margin:0 0 1.4em 0;}
+  .menu-panel .btn{width:100%; margin-bottom:0.8em; box-sizing:border-box;}
+  .menu-panel .btn:last-child{margin-bottom:0;}
+  .menu-toast{
+    position:fixed; top:56px; left:50%; transform:translateX(-50%); z-index:130;
+    font-family:var(--mono); font-size:0.75em; letter-spacing:0.1em; color:var(--ink);
+    background:rgba(13,13,13,0.85); border:1px solid var(--line); padding:0.6em 1.2em;
+    opacity:0; pointer-events:none; transition:opacity .3s ease;
+  }
+  .menu-toast.show{opacity:1;}
 
   /* ---------- CARD DETAIL MODAL ---------- */
   .album-slot{cursor:pointer;}
@@ -357,6 +434,20 @@
 
     <div class="teach-tip" id="teach-tip" style="display:none;"></div>
 
+    <div class="card-select-panel" id="card-select-panel">
+      <div class="csp-suit" id="csp-suit">♠</div>
+      <div class="csp-name" id="csp-name">黑桃3</div>
+      <div class="csp-type" id="csp-type">攻击卡</div>
+      <div class="csp-desc" id="csp-desc">造成 3 点伤害</div>
+      <div class="csp-divider"></div>
+      <div class="csp-combo-title" id="csp-combo-title">组合方案</div>
+      <div id="csp-combo-list"></div>
+      <div class="csp-actions">
+        <button class="btn" id="csp-btn-cancel">取消</button>
+        <button class="btn primary" id="csp-btn-use">使用卡牌</button>
+      </div>
+    </div>
+
     <div class="player-zone">
       <div class="player-stats">
         <div>HP <span id="player-hp-text" style="color:var(--memory)">20/20</span></div>
@@ -401,6 +492,7 @@
 
   <!-- ALBUM -->
   <div class="screen" id="screen-album">
+    <button class="btn album-back-btn" id="btn-album-back">← 返回</button>
     <div class="album-header">
       <h2>记忆相册</h2>
       <div class="album-count" id="album-count">已收录 0/52</div>
@@ -411,6 +503,19 @@
 
   <div class="footnote">命运 · DESTINY — DEMO v0.2</div>
   <div class="sound-toggle" id="sound-toggle" title="音乐开关">♪</div>
+  <div class="menu-toggle" id="menu-toggle" title="菜单">☰</div>
+
+  <!-- FUNCTION MENU -->
+  <div id="menu-overlay">
+    <div class="menu-panel" id="menu-panel">
+      <h3>命运菜单</h3>
+      <button class="btn" id="menu-btn-album">记忆相册</button>
+      <button class="btn" id="menu-btn-save">即时保存</button>
+      <button class="btn" id="menu-btn-load">读取存档</button>
+      <button class="btn primary" id="menu-btn-close" style="margin-top:1.2em;">关闭</button>
+    </div>
+  </div>
+  <div class="menu-toast" id="menu-toast"></div>
 
   <!-- CARD DETAIL MODAL -->
   <div id="card-detail-overlay">
@@ -461,6 +566,84 @@
   const MEMORY_CARD = { id:'memory1', suit:'☆', suitClass:'suit-memory', label:'记忆·觉醒', desc:'第一段找回的记忆',
                 typeLabel:'记忆卡', rarity:'稀有', story:'破碎意识中拾回的第一枚碎片，模糊却真实，是通往过去的第一道裂缝。', obtain:'首次战斗胜利后获得' };
 
+  // suit-type mapping used both for combo checking and for the card-selection info panel
+  const TYPE_TO_SUIT = { attack:'spade', heal:'heart', buff:'diamond', special:'club' };
+  const SUIT_LABEL = { spade:'黑桃（攻击）', heart:'红心（治疗）', diamond:'方块（强化）', club:'梅花（特殊）' };
+  // comboDatabase: independent combo data, not hard-coded into the UI.
+  // Each entry declares which two suits (i.e. which two cards, since each
+  // suit maps to exactly one card in this deck) are required, plus the
+  // combo's own name/effect. The UI only ever reads from this list.
+  //
+  // BALANCE NOTE: a combo consumes two cards, so its payout must clearly
+  // exceed what either card would do played alone, or players have no
+  // reason to ever use one. Each effect below = both cards' own base
+  // value combined + an extra bonus on top (computed in applyComboEffect).
+  const COMBO_DEFS = [
+    { pair:['spade','diamond'], key:'sd', name:'暴击强化',
+      effect:`造成 ${CARD_DEFS.spade3.value + CARD_DEFS.diamond2.value + 3} 点伤害（基础攻击+强化+暴击加成，远高于单独出牌）` },
+    { pair:['heart','spade'],   key:'hs', name:'绝境无敌',
+      effect:`恢复 ${CARD_DEFS.heart5.value} 点生命，并获得下回合无敌状态` },
+    { pair:['club','diamond'],  key:'cd', name:'命运逆转',
+      effect:`跳过敌方下次攻击，并恢复 ${CARD_DEFS.diamond2.value * 3} 点生命` },
+  ];
+  // Single source of truth for what each combo actually does to state.
+  // Used by both the explicit "click combo to fire" path (resolveCombo)
+  // and the passive "played complementary suits this turn" path
+  // (checkCombo), so the numbers can never drift apart between the two.
+  function applyComboEffect(key){
+    if (key === 'sd'){
+      const dmg = CARD_DEFS.spade3.value + CARD_DEFS.diamond2.value + 3; // base attack + buff + crit bonus
+      state.enemy.hp = Math.max(0, state.enemy.hp - dmg);
+      const sprite = $('#enemy-sprite');
+      sprite.classList.remove('hit'); void sprite.offsetWidth; sprite.classList.add('hit');
+      AudioSys.playAttack();
+      return `组合【暴击强化】发动：造成 ${dmg} 点伤害`;
+    }
+    if (key === 'hs'){
+      const heal = CARD_DEFS.heart5.value; // full heal value, plus the shield below
+      state.player.hp = Math.min(state.player.maxHp, state.player.hp + heal);
+      state.player.invincibleNextEnemyTurn = true;
+      AudioSys.playSpecial();
+      return `组合【绝境无敌】发动：恢复 ${heal} 点生命，并获得下回合无敌状态`;
+    }
+    if (key === 'cd'){
+      const heal = CARD_DEFS.diamond2.value * 3; // buff value amplified by the combo
+      state.player.hp = Math.min(state.player.maxHp, state.player.hp + heal);
+      state.player.skipEnemyAttack = true;
+      AudioSys.playHeal();
+      return `组合【命运逆转】发动：跳过敌方下次攻击，并恢复 ${heal} 点生命`;
+    }
+    return '';
+  }
+  function getCombosForSuit(suit){
+    return COMBO_DEFS
+      .filter(c => c.pair.includes(suit))
+      .map(c => ({ ...c, partner: c.pair.find(s => s !== suit) }));
+  }
+  // Scans the CURRENT hand (not just suit theory) for combos that are
+  // actually playable right now given the selected card: for every combo
+  // that involves the selected card's suit, look for a different card in
+  // hand carrying the partner suit. Returns only real, executable matches.
+  function findAvailableCombos(selectedIdx){
+    const hand = state.player.hand;
+    const cardId = hand[selectedIdx];
+    if (!cardId) return [];
+    const def = CARD_DEFS[cardId];
+    const suit = TYPE_TO_SUIT[def.type];
+    const matches = [];
+    getCombosForSuit(suit).forEach(combo => {
+      for (let i = 0; i < hand.length; i++){
+        if (i === selectedIdx) continue;
+        const otherDef = CARD_DEFS[hand[i]];
+        if (TYPE_TO_SUIT[otherDef.type] === combo.partner){
+          matches.push({ combo, partnerIdx: i });
+          break; // one partner card is enough to make this combo available
+        }
+      }
+    });
+    return matches;
+  }
+
   const STORY = [
     { speaker:'玩家',  lines:['天啊，这是哪儿？','我怎么会在这里？'] },
     { speaker:'萨拉',  lines:['你醒了。','别动，你刚刚伤得很重。'] },
@@ -488,6 +671,10 @@
     combosUsedThisTurn: [],
     collection: new Set(['spade3','heart5','diamond2','club4']),
     firstTurn: true,
+    currentScreen: 'screen-title',
+    previousScreen: 'screen-title',
+    selectedCardIdx: null,
+    dialogueDone: false,
   };
 
   /* ---------------- UTIL ---------------- */
@@ -495,7 +682,13 @@
   function showScreen(id){
     document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
     $('#' + id).classList.add('active');
+    state.currentScreen = id;
     AudioSys.onScreen(id);
+  }
+  /* ---------------- GLOBAL CLICK SOUND ---------------- */
+  function playClickSound(){
+    AudioSys.init();
+    AudioSys.playClick();
   }
   function shuffle(arr){
     for (let i = arr.length - 1; i > 0; i--){
@@ -714,7 +907,9 @@
       playEnemyHit(){ if(!ctx) return; tone(85,0.35,'sine',0.22,40); burst(0.12,180,'lowpass',0.18); },
       playDeflect(){ if(!ctx) return; tone(520,0.3,'sine',0.1,700); },
       playVictory(){ if(!ctx) return; [523.3,659.3,784.0].forEach((f,i)=>setTimeout(()=>tone(f,0.7,'sine',0.14),i*160)); },
-      playDefeat(){ if(!ctx) return; tone(160,1.0,'sine',0.16,70); }
+      playDefeat(){ if(!ctx) return; tone(160,1.0,'sine',0.16,70); },
+      /* subtle mechanical/paper click for general UI interaction feedback */
+      playClick(){ if(!ctx) return; burst(0.045, 2600, 'highpass', 0.055); tone(880,0.03,'sine',0.02); }
     };
   })();
 
@@ -727,9 +922,11 @@
     $('#dialogue-text').textContent = entry.text;
   }
   function advanceDialogue(){
+    playClickSound();
     state.dialogueIndex++;
     if (state.dialogueIndex >= DIALOGUE_QUEUE.length){
       $('#screen-story').removeEventListener('click', advanceDialogue);
+      state.dialogueDone = true;
       runTransition('battle');
       return;
     }
@@ -820,7 +1017,9 @@
     state.enemy.hp = state.enemy.maxHp;
     state.cardsPlayedThisTurn = 0;
     state.suitsPlayedThisTurn = [];
+    state.combosUsedThisTurn = [];
     state.firstTurn = true;
+    state.selectedCardIdx = null;
 
     state.player.deck = buildDeck();
     for (let i = 0; i < 3; i++) drawCard();
@@ -829,7 +1028,7 @@
     renderBattle();
 
     $('#teach-tip').style.display = 'block';
-    $('#teach-tip').textContent = '点击手牌出牌，消耗行动力。每回合最多出 3 张牌，出牌后点击"结束回合"，敌人才会行动。';
+    $('#teach-tip').textContent = '点击手牌先查看：若手牌中能组成组合，点击组合直接发动；若无组合，点击"使用卡牌"出普通攻击。每回合最多行动 3 次，之后点击"结束回合"，敌人才会行动。';
   }
 
   function drawCard(){
@@ -874,21 +1073,93 @@
     const hand = $('#hand');
     hand.innerHTML = '';
     const cardLimitReached = state.cardsPlayedThisTurn >= 3;
+    if (state.selectedCardIdx !== null && state.selectedCardIdx >= state.player.hand.length){
+      state.selectedCardIdx = null;
+    }
     state.player.hand.forEach((cardId, idx) => {
       const def = CARD_DEFS[cardId];
       const disabled = state.player.ap < 1 || cardLimitReached;
+      const selected = state.selectedCardIdx === idx;
       const card = document.createElement('div');
-      card.className = `card ${def.suitClass}` + (disabled ? ' disabled' : '');
+      card.className = `card ${def.suitClass}` + (disabled ? ' disabled' : '') + (selected ? ' selected' : '');
       card.innerHTML = `
         <div class="suit">${def.suit}</div>
         <div class="value">${def.label}</div>
         <div class="desc">${def.desc}</div>
       `;
-      if (!disabled){
-        card.addEventListener('click', () => playCard(idx));
-      }
+      // clicking a card only selects it for viewing — it never plays it directly
+      card.addEventListener('click', () => selectCard(idx));
       hand.appendChild(card);
     });
+    renderCardSelectPanel();
+  }
+
+  /* ---------------- CARD SELECTION (view-only, does not play the card) ---------------- */
+  function selectCard(idx){
+    playClickSound();
+    state.selectedCardIdx = (state.selectedCardIdx === idx) ? null : idx;
+    renderBattle();
+  }
+
+  function renderCardSelectPanel(){
+    const panel = $('#card-select-panel');
+    const idx = state.selectedCardIdx;
+    const cardId = (idx !== null) ? state.player.hand[idx] : null;
+    if (!cardId){
+      panel.classList.remove('active');
+      return;
+    }
+    const def = CARD_DEFS[cardId];
+    const suit = TYPE_TO_SUIT[def.type];
+    $('#csp-suit').textContent = def.suit;
+    $('#csp-suit').className = 'csp-suit ' + def.suitClass;
+    $('#csp-name').textContent = def.label;
+    $('#csp-type').textContent = def.typeLabel || '——';
+    $('#csp-desc').textContent = def.desc;
+
+    const cardLimitReached = state.cardsPlayedThisTurn >= 3;
+    const disabled = state.player.ap < 1 || cardLimitReached;
+
+    // Step 1 of the click: check the CURRENT hand for real, executable combos
+    // involving this card (not just theoretical suit pairings).
+    const matches = findAvailableCombos(idx);
+    const list = $('#csp-combo-list');
+    const title = $('#csp-combo-title');
+    list.innerHTML = '';
+
+    if (matches.length > 0){
+      // Combos exist: only the combo buttons are offered. Picking one
+      // immediately consumes both cards and resolves the effect — no
+      // separate "confirm play" step.
+      title.textContent = '可发动组合 · 点击直接发动';
+      matches.forEach(m => {
+        const partnerId = state.player.hand[m.partnerIdx];
+        const partnerDef = CARD_DEFS[partnerId];
+        const row = document.createElement('div');
+        row.className = 'csp-combo-item playable' + (disabled ? ' disabled' : '');
+        row.innerHTML = `
+          <div class="csp-combo-pair">需要：${def.label} + ${partnerDef.label}</div>
+          <div class="csp-combo-name">${m.combo.name}</div>
+          <div class="csp-combo-effect">效果：${m.combo.effect}</div>
+        `;
+        row.addEventListener('click', () => {
+          if (disabled) return;
+          resolveCombo(idx, m.partnerIdx, m.combo);
+        });
+        list.appendChild(row);
+      });
+      // No combo available right now, so there's nothing to "confirm" separately.
+      $('#csp-btn-use').style.display = 'none';
+    } else {
+      // No combo can be formed with the current hand: fall back to a plain
+      // single-card play, chosen explicitly via the "使用卡牌" button.
+      title.textContent = '普通攻击';
+      list.innerHTML = '<div class="csp-combo-empty">当前手牌无法组成组合，可直接出牌</div>';
+      $('#csp-btn-use').style.display = '';
+      $('#csp-btn-use').disabled = disabled;
+    }
+
+    panel.classList.add('active');
   }
   function addTag(container, text){
     const t = document.createElement('div');
@@ -897,12 +1168,19 @@
     container.appendChild(t);
   }
 
-  function playCard(idx){
+  // Executes the actual card play: animation, battle calculation, enemy turn.
+  // Only ever called from the "使用卡牌" (confirm) button — never from selecting a card.
+  function confirmPlayCard(){
+    const idx = state.selectedCardIdx;
+    if (idx === null || idx === undefined) return;
     if (state.cardsPlayedThisTurn >= 3) return;
     const cardId = state.player.hand[idx];
+    if (!cardId) return;
     const def = CARD_DEFS[cardId];
     if (state.player.ap < 1) return;
 
+    playClickSound();
+    state.selectedCardIdx = null;
     state.player.ap -= 1;
     state.cardsPlayedThisTurn += 1;
     state.player.hand.splice(idx, 1);
@@ -942,33 +1220,70 @@
     }
   }
 
+  // Executes a combo the player explicitly picked from the combo list.
+  // This is an action-phase step: it consumes both cards, applies the
+  // combo's effect, and resolves immediately — there is no further
+  // "confirm play" click, matching the plain single-card flow's cost of
+  // 1 action point and counting once against the per-turn play limit.
+  function resolveCombo(selectedIdx, partnerIdx, comboDef){
+    if (state.cardsPlayedThisTurn >= 3) return;
+    if (state.player.ap < 1) return;
+    const hand = state.player.hand;
+    const cardA = hand[selectedIdx];
+    const cardB = hand[partnerIdx];
+    if (!cardA || !cardB) return;
+
+    playClickSound();
+    state.selectedCardIdx = null;
+    state.player.ap -= 1;
+    state.cardsPlayedThisTurn += 1;
+
+    // remove the higher index first so the other index stays valid
+    [selectedIdx, partnerIdx].sort((a, b) => b - a).forEach(i => {
+      state.player.discard.push(state.player.hand[i]);
+      state.player.hand.splice(i, 1);
+    });
+
+    const labelA = CARD_DEFS[cardA].label;
+    const labelB = CARD_DEFS[cardB].label;
+
+    const effectMsg = applyComboEffect(comboDef.key);
+    const logMsg = `${labelA} + ${labelB} → ${effectMsg}`;
+
+    // mark this combo as used this turn so the passive multi-play combo
+    // check (below) never fires the same combo a second time
+    if (!state.combosUsedThisTurn.includes(comboDef.key)){
+      state.combosUsedThisTurn.push(comboDef.key);
+    }
+
+    setLog(logMsg);
+    renderBattle();
+
+    if (state.enemy.hp <= 0){
+      setTimeout(onVictory, 500);
+    }
+  }
+
   function checkCombo(playedType){
-    // suit-type mapping: attack=spade, heal=heart, buff=diamond, special=club
-    const map = { attack:'spade', heal:'heart', buff:'diamond', special:'club' };
-    const played = map[playedType];
+    const played = TYPE_TO_SUIT[playedType];
     state.suitsPlayedThisTurn.push(played);
 
     const has = s => state.suitsPlayedThisTurn.includes(s);
-    function tryCombo(a, b, key, effect, msg){
+    function tryCombo(a, b, key){
       if (state.combosUsedThisTurn.includes(key)) return;
       if (has(a) && has(b)){
         state.combosUsedThisTurn.push(key);
-        effect();
+        const msg = applyComboEffect(key);
         setTimeout(() => setLog(msg), 700);
       }
     }
-    tryCombo('spade','diamond','sd', () => {
-      state.enemy.hp = Math.max(0, state.enemy.hp - 2);
-    }, '组合 黑桃+方块：暴击追加 2 点伤害！');
-    tryCombo('heart','spade','hs', () => {
-      state.player.invincibleNextEnemyTurn = true;
-    }, '组合 红心+黑桃：获得无敌状态！');
-    tryCombo('club','diamond','cd', () => {
-      state.player.hp = Math.min(state.player.maxHp, state.player.hp + 4);
-    }, '组合 梅花+方块：恢复 4 点生命！');
+    tryCombo('spade','diamond','sd');
+    tryCombo('heart','spade','hs');
+    tryCombo('club','diamond','cd');
   }
 
   function endTurn(){
+    state.selectedCardIdx = null;
     $('#teach-tip').style.display = 'none';
     state.firstTurn = false;
     // enemy attack phase
@@ -1017,6 +1332,9 @@
 
   /* ---------------- ALBUM ---------------- */
   function showAlbum(){
+    if (state.currentScreen !== 'screen-album'){
+      state.previousScreen = state.currentScreen;
+    }
     const grid = $('#album-grid');
     grid.innerHTML = '';
     const allCards = [...Object.values(CARD_DEFS), MEMORY_CARD];
@@ -1035,6 +1353,10 @@
     });
     $('#album-count').textContent = `已收录 ${state.collection.size}/52`;
     showScreen('screen-album');
+  }
+  function closeAlbum(){
+    const target = state.previousScreen || 'screen-title';
+    showScreen(target);
   }
 
   /* ---------------- LONG PRESS (card detail trigger) ---------------- */
@@ -1089,13 +1411,99 @@
     $('#card-detail-overlay').classList.add('active');
   }
   function closeCardDetail(){
+    playClickSound();
     $('#card-detail-overlay').classList.remove('active');
   }
   $('#card-detail-overlay').addEventListener('click', closeCardDetail);
 
+  /* ---------------- SAVE / LOAD (Demo, localStorage) ---------------- */
+  const SAVE_KEY = 'destiny_demo_save_v1';
+
+  function showToast(msg){
+    const el = $('#menu-toast');
+    el.textContent = msg;
+    el.classList.remove('show');
+    void el.offsetWidth;
+    el.classList.add('show');
+    clearTimeout(showToast._t);
+    showToast._t = setTimeout(() => el.classList.remove('show'), 1800);
+  }
+
+  function saveGame(){
+    try{
+      const data = {
+        currentScreen: state.currentScreen,
+        dialogueIndex: state.dialogueIndex,
+        dialogueDone: state.dialogueDone,
+        collection: Array.from(state.collection),
+        player: {
+          hp: state.player.hp, maxHp: state.player.maxHp,
+          ap: state.player.ap, maxAp: state.player.maxAp,
+          hand: state.player.hand.slice(), deck: state.player.deck.slice(), discard: state.player.discard.slice(),
+          buffNextAtk: state.player.buffNextAtk,
+          invincibleNextEnemyTurn: state.player.invincibleNextEnemyTurn,
+          skipEnemyAttack: state.player.skipEnemyAttack
+        },
+        enemy: { name: state.enemy.name, hp: state.enemy.hp, maxHp: state.enemy.maxHp, atk: state.enemy.atk },
+        cardsPlayedThisTurn: state.cardsPlayedThisTurn,
+        firstTurn: state.firstTurn
+      };
+      localStorage.setItem(SAVE_KEY, JSON.stringify(data));
+      showToast('已保存当前进度');
+    } catch(e){
+      showToast('保存失败');
+    }
+  }
+
+  function loadGame(){
+    let data;
+    try{
+      const raw = localStorage.getItem(SAVE_KEY);
+      if (!raw){ showToast('没有找到存档'); return; }
+      data = JSON.parse(raw);
+    } catch(e){ showToast('读取存档失败'); return; }
+
+    state.currentScreen = data.currentScreen || 'screen-title';
+    state.dialogueIndex = data.dialogueIndex || 0;
+    state.dialogueDone = !!data.dialogueDone;
+    state.collection = new Set(data.collection || ['spade3','heart5','diamond2','club4']);
+    Object.assign(state.player, data.player || {});
+    Object.assign(state.enemy, data.enemy || {});
+    state.cardsPlayedThisTurn = data.cardsPlayedThisTurn || 0;
+    state.suitsPlayedThisTurn = [];
+    state.combosUsedThisTurn = [];
+    state.firstTurn = !!data.firstTurn;
+    state.selectedCardIdx = null;
+
+    closeMenu();
+    const target = state.currentScreen;
+    if (target === 'screen-battle'){
+      showScreen('screen-battle');
+      renderBattle();
+    } else if (target === 'screen-story'){
+      showScreen('screen-story');
+      renderDialogue();
+    } else if (target === 'screen-album'){
+      showAlbum();
+    } else {
+      showScreen(target);
+    }
+    showToast('已读取存档');
+  }
+
+  /* ---------------- MENU ---------------- */
+  function openMenu(){
+    playClickSound();
+    $('#menu-overlay').classList.add('active');
+  }
+  function closeMenu(){
+    $('#menu-overlay').classList.remove('active');
+  }
+
   /* ---------------- BOOTSTRAP ---------------- */
   $('#btn-start').addEventListener('click', () => {
     AudioSys.init();
+    playClickSound();
     state.dialogueIndex = 0;
     showScreen('screen-story');
     renderDialogue();
@@ -1111,10 +1519,48 @@
     btn.textContent = isMuted ? '✕' : '♪';
   });
 
-  $('#btn-end-turn').addEventListener('click', endTurn);
-  $('#btn-to-album').addEventListener('click', () => runTransition('album'));
-  $('#btn-retry').addEventListener('click', startBattle);
+  $('#menu-toggle').addEventListener('click', (e) => {
+    e.stopPropagation();
+    openMenu();
+  });
+  $('#menu-overlay').addEventListener('click', () => {
+    playClickSound();
+    closeMenu();
+  });
+  $('#menu-panel').addEventListener('click', (e) => e.stopPropagation());
+
+  $('#menu-btn-album').addEventListener('click', () => {
+    playClickSound();
+    closeMenu();
+    showAlbum();
+  });
+  $('#menu-btn-save').addEventListener('click', () => {
+    playClickSound();
+    saveGame();
+  });
+  $('#menu-btn-load').addEventListener('click', () => {
+    playClickSound();
+    loadGame();
+  });
+  $('#menu-btn-close').addEventListener('click', () => {
+    playClickSound();
+    closeMenu();
+  });
+
+  $('#btn-album-back').addEventListener('click', () => { playClickSound(); closeAlbum(); });
+
+  $('#csp-btn-use').addEventListener('click', () => { confirmPlayCard(); });
+  $('#csp-btn-cancel').addEventListener('click', () => {
+    playClickSound();
+    state.selectedCardIdx = null;
+    renderBattle();
+  });
+
+  $('#btn-end-turn').addEventListener('click', () => { playClickSound(); endTurn(); });
+  $('#btn-to-album').addEventListener('click', () => { playClickSound(); runTransition('album'); });
+  $('#btn-retry').addEventListener('click', () => { playClickSound(); startBattle(); });
   $('#btn-restart-demo').addEventListener('click', () => {
+    playClickSound();
     state.collection = new Set(['spade3','heart5','diamond2','club4']);
     showScreen('screen-title');
   });

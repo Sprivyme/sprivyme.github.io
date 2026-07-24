@@ -20,11 +20,19 @@
     --serif: Georgia, 'Iowan Old Style', 'Times New Roman', serif;
     --mono:  ui-monospace, 'SFMono-Regular', 'Courier New', monospace;
   }
-  *{box-sizing:border-box;}
+  *{box-sizing:border-box; -webkit-tap-highlight-color:transparent; -webkit-touch-callout:none;}
   html,body{
     margin:0; padding:0; height:100%; background:var(--bg); color:var(--ink);
     font-family:var(--serif);
     overflow:hidden;
+    -webkit-tap-highlight-color:transparent;
+  }
+  /* 取消移动端默认点击高亮/回调菜单，保留正常点击响应 */
+  button, .btn, .card, .album-slot, #screen-story, .story-stage{
+    touch-action:manipulation;
+    -webkit-user-select:none;
+    user-select:none;
+    -webkit-tap-highlight-color:transparent;
   }
   #app{position:relative; width:100%; height:100vh; min-height:560px;}
 
@@ -95,25 +103,36 @@
   /* ---------- TRANSITION (signature element) ---------- */
   #screen-transition{background:var(--bg);}
   .card-flip-wrap{
-    perspective:1000px; width:150px; height:220px; position:relative;
+    perspective:1200px; width:150px; height:220px; position:relative;
   }
-  .card-face{
-    position:absolute; inset:0; border:1px solid var(--line); border-radius:6px;
-    background:var(--panel); display:flex; align-items:center; justify-content:center;
-    font-size:5em; animation:cardCycle 2s steps(4) 1;
+  .card-glow{
+    position:absolute; inset:-36px; border-radius:50%; pointer-events:none;
+    background:radial-gradient(circle, rgba(233,230,222,0.16), rgba(233,230,222,0) 68%);
+    opacity:0; transition:opacity .5s ease;
+  }
+  .card-glow.show{opacity:1;}
+  .fate-card{
+    width:100%; height:100%; position:relative; transform-style:preserve-3d;
+    transform:rotateY(0deg) scale(0.86); will-change:transform;
+  }
+  .card-side{
+    position:absolute; inset:0; border:1px solid var(--line); border-radius:8px;
+    display:flex; align-items:center; justify-content:center; backface-visibility:hidden;
+    -webkit-backface-visibility:hidden;
+  }
+  .card-back{
+    background:
+      repeating-linear-gradient(45deg, #0d0d0d, #0d0d0d 7px, #141310 7px, #141310 14px);
     box-shadow:0 0 40px rgba(255,255,255,0.05);
   }
-  .card-face .pip{position:absolute; opacity:0;}
-  .pip.p1{color:var(--spade); animation:showPip 2s steps(4) 1;}
-  .pip.p2{color:var(--diamond); animation:showPip 2s steps(4) 1; animation-delay:-0.5s;}
-  .pip.p3{color:var(--heart); animation:showPip 2s steps(4) 1; animation-delay:-1s;}
-  .pip.p4{color:var(--club); animation:showPip 2s steps(4) 1; animation-delay:-1.5s;}
-  @keyframes cardCycle{
-    0%{transform:rotateY(0deg);} 100%{transform:rotateY(1440deg);}
+  .card-back .back-mark{
+    font-size:2.6em; color:var(--ink-dim); opacity:0.45; letter-spacing:0.1em;
   }
-  @keyframes showPip{
-    0%,24.9%{opacity:0;} 0.1%,24.8%{opacity:1;} 25%,100%{opacity:0;}
+  .card-front{
+    background:var(--panel); transform:rotateY(180deg);
+    box-shadow:0 0 50px rgba(255,255,255,0.08);
   }
+  .card-front .pip-main{font-size:5em; transition:color .1s linear;}
   .loading-text{
     margin-top:2em; font-family:var(--mono); letter-spacing:0.3em; color:var(--ink-dim);
     font-size:0.85em;
@@ -235,6 +254,55 @@
     position:fixed; bottom:14px; left:50%; transform:translateX(-50%);
     font-family:var(--mono); font-size:0.65em; color:#3d3b35; letter-spacing:0.15em; z-index:2;
   }
+  .sound-toggle{
+    position:fixed; top:14px; right:14px; z-index:20;
+    width:34px; height:34px; border-radius:50%; border:1px solid var(--line);
+    background:rgba(13,13,13,0.6); color:var(--ink-dim); font-family:var(--mono);
+    font-size:0.85em; display:flex; align-items:center; justify-content:center;
+    cursor:pointer; transition:all .2s ease; touch-action:manipulation;
+    -webkit-tap-highlight-color:transparent;
+  }
+  .sound-toggle:hover{border-color:var(--ink); color:var(--ink);}
+  .sound-toggle.muted{opacity:0.4;}
+
+  /* ---------- CARD DETAIL MODAL ---------- */
+  .album-slot{cursor:pointer;}
+  .album-slot.empty{cursor:default;}
+  #card-detail-overlay{
+    position:fixed; inset:0; z-index:100; display:none;
+    align-items:center; justify-content:center;
+    background:rgba(0,0,0,0.86);
+    backdrop-filter:blur(2px);
+    animation:cd-fade-in .22s ease;
+    cursor:pointer;
+  }
+  #card-detail-overlay.active{display:flex;}
+  @keyframes cd-fade-in{from{opacity:0;} to{opacity:1;}}
+  .card-detail-panel{
+    width:min(340px, 84vw); max-height:82vh; overflow-y:auto;
+    background:var(--panel); border:1px solid var(--line); border-radius:10px;
+    padding:2.2em 1.8em 1.8em 1.8em; text-align:center; cursor:default;
+    box-shadow:0 0 60px rgba(255,255,255,0.06);
+    animation:cd-pop-in .28s cubic-bezier(.2,.7,.3,1);
+  }
+  @keyframes cd-pop-in{from{opacity:0; transform:scale(0.92);} to{opacity:1; transform:scale(1);}}
+  .cd-suit{font-size:3.2em; line-height:1;}
+  .cd-name{font-size:1.5em; letter-spacing:0.15em; margin:0.3em 0 1.1em 0;}
+  .cd-divider{height:1px; background:var(--line); margin:1em 0;}
+  .cd-row{text-align:left; margin-bottom:1.1em;}
+  .cd-row:last-child{margin-bottom:0;}
+  .cd-label{
+    font-family:var(--mono); font-size:0.65em; letter-spacing:0.2em; color:var(--ink-dim);
+    text-transform:uppercase; margin-bottom:0.35em;
+  }
+  .cd-value{font-size:0.98em; line-height:1.55; font-weight:400;}
+  .cd-value.rarity-普通{color:var(--ink-dim);}
+  .cd-value.rarity-稀有{color:var(--memory);}
+  .cd-value.rarity-罕见{color:var(--diamond);}
+  .cd-close-hint{
+    margin-top:1.6em; font-family:var(--mono); font-size:0.62em; letter-spacing:0.2em;
+    color:var(--ink-dim); opacity:0.55;
+  }
 </style>
 </head>
 <body>
@@ -262,14 +330,13 @@
   <!-- TRANSITION -->
   <div class="screen" id="screen-transition">
     <div class="card-flip-wrap">
-      <div class="card-face">
-        <span class="pip p1">♠</span>
-        <span class="pip p2">♦</span>
-        <span class="pip p3">♥</span>
-        <span class="pip p4">♣</span>
+      <div class="card-glow" id="card-glow"></div>
+      <div class="fate-card" id="fate-card">
+        <div class="card-side card-back"><div class="back-mark">命</div></div>
+        <div class="card-side card-front"><span class="pip-main" id="pip-main">♠</span></div>
       </div>
     </div>
-    <div class="loading-text">LOADING...</div>
+    <div class="loading-text" id="loading-text">命运展开中...</div>
   </div>
 
   <!-- BATTLE -->
@@ -342,7 +409,38 @@
     <button class="btn" id="btn-restart-demo">重新开始 Demo</button>
   </div>
 
-  <div class="footnote">命运 · DESTINY — DEMO v0.1</div>
+  <div class="footnote">命运 · DESTINY — DEMO v0.2</div>
+  <div class="sound-toggle" id="sound-toggle" title="音乐开关">♪</div>
+
+  <!-- CARD DETAIL MODAL -->
+  <div id="card-detail-overlay">
+    <div class="card-detail-panel" id="card-detail-panel">
+      <div class="cd-suit" id="cd-suit">♠</div>
+      <div class="cd-name" id="cd-name">黑桃3</div>
+      <div class="cd-divider"></div>
+      <div class="cd-row">
+        <div class="cd-label">类型</div>
+        <div class="cd-value" id="cd-type">攻击卡</div>
+      </div>
+      <div class="cd-row">
+        <div class="cd-label">效果</div>
+        <div class="cd-value" id="cd-desc">造成 3 点伤害</div>
+      </div>
+      <div class="cd-row">
+        <div class="cd-label">稀有度</div>
+        <div class="cd-value" id="cd-rarity">普通</div>
+      </div>
+      <div class="cd-row">
+        <div class="cd-label">背景描述</div>
+        <div class="cd-value" id="cd-story">一张记录着命运力量的普通卡牌。</div>
+      </div>
+      <div class="cd-row">
+        <div class="cd-label">获得方式</div>
+        <div class="cd-value" id="cd-obtain">初次战斗解锁</div>
+      </div>
+      <div class="cd-close-hint">点击任意位置关闭</div>
+    </div>
+  </div>
 </div>
 
 <script>
@@ -351,12 +449,17 @@
 
   /* ---------------- DATA ---------------- */
   const CARD_DEFS = {
-    spade3:   { id:'spade3',   suit:'♠', suitClass:'suit-spade',   label:'黑桃3', type:'attack',  value:3, desc:'造成 3 点伤害' },
-    heart5:   { id:'heart5',   suit:'♥', suitClass:'suit-heart',   label:'红心5', type:'heal',    value:5, desc:'恢复 5 点生命' },
-    diamond2: { id:'diamond2', suit:'♦', suitClass:'suit-diamond', label:'方块2', type:'buff',    value:2, desc:'下次攻击伤害+2' },
-    club4:    { id:'club4',    suit:'♣', suitClass:'suit-club',    label:'梅花4', type:'special', value:4, desc:'跳过敌人下次攻击' },
+    spade3:   { id:'spade3',   suit:'♠', suitClass:'suit-spade',   label:'黑桃3', type:'attack',  value:3, desc:'造成 3 点伤害',
+                typeLabel:'攻击卡', rarity:'普通', story:'一张记录着命运力量的普通卡牌，锋芒藏于沉默之中。', obtain:'初次战斗解锁' },
+    heart5:   { id:'heart5',   suit:'♥', suitClass:'suit-heart',   label:'红心5', type:'heal',    value:5, desc:'恢复 5 点生命',
+                typeLabel:'治疗卡', rarity:'普通', story:'温热的气息封存其中，据说能抚平最深的伤口。', obtain:'初次战斗解锁' },
+    diamond2: { id:'diamond2', suit:'♦', suitClass:'suit-diamond', label:'方块2', type:'buff',    value:2, desc:'下次攻击伤害+2',
+                typeLabel:'强化卡', rarity:'普通', story:'棱角分明的光泽下，蕴藏着尚未释放的力量。', obtain:'初次战斗解锁' },
+    club4:    { id:'club4',    suit:'♣', suitClass:'suit-club',    label:'梅花4', type:'special', value:4, desc:'跳过敌人下次攻击',
+                typeLabel:'特殊卡', rarity:'普通', story:'幽暗的纹路扭曲着因果，让敌人的行动悄然落空。', obtain:'初次战斗解锁' },
   };
-  const MEMORY_CARD = { id:'memory1', suit:'☆', suitClass:'suit-memory', label:'记忆·觉醒', desc:'第一段找回的记忆' };
+  const MEMORY_CARD = { id:'memory1', suit:'☆', suitClass:'suit-memory', label:'记忆·觉醒', desc:'第一段找回的记忆',
+                typeLabel:'记忆卡', rarity:'稀有', story:'破碎意识中拾回的第一枚碎片，模糊却真实，是通往过去的第一道裂缝。', obtain:'首次战斗胜利后获得' };
 
   const STORY = [
     { speaker:'玩家',  lines:['天啊，这是哪儿？','我怎么会在这里？'] },
@@ -392,6 +495,7 @@
   function showScreen(id){
     document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
     $('#' + id).classList.add('active');
+    AudioSys.onScreen(id);
   }
   function shuffle(arr){
     for (let i = arr.length - 1; i > 0; i--){
@@ -400,6 +504,219 @@
     }
     return arr;
   }
+
+  /* ---------------- AUDIO SYSTEM ---------------- */
+  const AudioSys = (function(){
+    let ctx = null, master = null, musicGain = null, sfxGain = null;
+    let layer = null, currentScene = null, muted = false;
+    const VOL = 0.35;
+
+    function init(){
+      if (ctx) return;
+      try{
+        ctx = new (window.AudioContext || window.webkitAudioContext)();
+        master = ctx.createGain(); master.gain.value = muted ? 0 : VOL; master.connect(ctx.destination);
+        musicGain = ctx.createGain(); musicGain.gain.value = 1; musicGain.connect(master);
+        sfxGain = ctx.createGain(); sfxGain.gain.value = 0.9; sfxGain.connect(master);
+      } catch(e){ ctx = null; }
+    }
+
+    function noiseBuffer(sec){
+      const buf = ctx.createBuffer(1, Math.max(1, Math.floor(ctx.sampleRate*sec)), ctx.sampleRate);
+      const d = buf.getChannelData(0);
+      for (let i=0;i<d.length;i++) d[i] = Math.random()*2-1;
+      return buf;
+    }
+
+    function fadeGain(node, val, dur){
+      const now = ctx.currentTime;
+      node.gain.cancelScheduledValues(now);
+      node.gain.setValueAtTime(node.gain.value, now);
+      node.gain.linearRampToValueAtTime(val, now+dur);
+    }
+
+    /* ---- SFX primitives ---- */
+    function tone(freq, dur, type, gainVal, glideTo){
+      if (!ctx) return;
+      const osc = ctx.createOscillator();
+      osc.type = type || 'sine';
+      osc.frequency.setValueAtTime(freq, ctx.currentTime);
+      if (glideTo) osc.frequency.exponentialRampToValueAtTime(glideTo, ctx.currentTime+dur);
+      const g = ctx.createGain();
+      g.gain.setValueAtTime(0.0001, ctx.currentTime);
+      g.gain.linearRampToValueAtTime(gainVal, ctx.currentTime+0.02);
+      g.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime+dur);
+      osc.connect(g); g.connect(sfxGain);
+      osc.start(); osc.stop(ctx.currentTime+dur+0.02);
+    }
+    function burst(dur, filterFreq, filterType, gainVal){
+      if (!ctx) return;
+      const src = ctx.createBufferSource();
+      src.buffer = noiseBuffer(dur);
+      const filt = ctx.createBiquadFilter();
+      filt.type = filterType || 'highpass'; filt.frequency.value = filterFreq || 1000;
+      const g = ctx.createGain();
+      g.gain.setValueAtTime(gainVal, ctx.currentTime);
+      g.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime+dur);
+      src.connect(filt); filt.connect(g); g.connect(sfxGain);
+      src.start(); src.stop(ctx.currentTime+dur+0.02);
+    }
+
+    /* ---- Ambient scene layers ---- */
+    /* Title: spacious sustained pad + slow, fixed 4-note melodic loop.
+       No randomness — a deliberate, repeating theme ("destiny begins to turn"). */
+    function buildTitleLayer(){
+      const g = ctx.createGain(); g.gain.value = 0; g.connect(musicGain);
+
+      // low sustained pad (mystery / open space, unchanged in character)
+      const o1 = ctx.createOscillator(); o1.type='sine'; o1.frequency.value = 55;
+      const o2 = ctx.createOscillator(); o2.type='sine'; o2.frequency.value = 82.4;
+      const g1 = ctx.createGain(); g1.gain.value=0.45; o1.connect(g1); g1.connect(g);
+      const g2 = ctx.createGain(); g2.gain.value=0.24; o2.connect(g2); g2.connect(g);
+      o1.start(); o2.start();
+
+      // fixed slow melodic loop — simple, repeating, no randomness
+      const melody = [220.00, 261.63, 293.66, 246.94]; // A3, C4, D4, B3
+      const noteDur = 3.4, noteGap = 3.8;
+      let stopped = false, idx = 0, timer = null;
+      function playNote(){
+        if (stopped) return;
+        const freq = melody[idx % melody.length];
+        idx++;
+        const osc = ctx.createOscillator(); osc.type='sine'; osc.frequency.value = freq;
+        const ng = ctx.createGain();
+        ng.gain.setValueAtTime(0.0001, ctx.currentTime);
+        ng.gain.linearRampToValueAtTime(0.09, ctx.currentTime + 1.0);
+        ng.gain.linearRampToValueAtTime(0.055, ctx.currentTime + noteDur*0.6);
+        ng.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + noteDur);
+        osc.connect(ng); ng.connect(g);
+        osc.start(); osc.stop(ctx.currentTime + noteDur + 0.05);
+        timer = setTimeout(playNote, noteGap*1000);
+      }
+      timer = setTimeout(playNote, 700);
+
+      return { gain:g, stop(){
+        stopped = true; clearTimeout(timer);
+        [o1,o2].forEach(n=>{ try{n.stop();}catch(e){} });
+      } };
+    }
+
+    /* Story: quiet, sad music-box theme. Fixed melody with rests — no randomness. */
+    function buildStoryLayer(){
+      const g = ctx.createGain(); g.gain.value = 0; g.connect(musicGain);
+      const drone = ctx.createOscillator(); drone.type='sine'; drone.frequency.value=110;
+      const dg = ctx.createGain(); dg.gain.value=0.06; drone.connect(dg); dg.connect(g);
+      drone.start();
+
+      // fixed sad melody (freq, hold time in seconds before next step); null = rest
+      const sequence = [
+        { f:392.00, d:2.2 }, // G4
+        { f:349.23, d:1.6 }, // F4
+        { f:null,   d:1.0 },
+        { f:329.63, d:2.4 }, // E4
+        { f:293.66, d:1.6 }, // D4
+        { f:null,   d:1.2 },
+        { f:261.63, d:2.8 }, // C4
+        { f:293.66, d:1.8 }, // D4
+        { f:null,   d:2.0 },
+      ];
+      let stopped = false, idx = 0, timer = null;
+      function step(){
+        if (stopped) return;
+        const note = sequence[idx % sequence.length];
+        idx++;
+        if (note.f){
+          const osc = ctx.createOscillator(); osc.type='triangle'; osc.frequency.value = note.f;
+          const ng = ctx.createGain();
+          ng.gain.setValueAtTime(0.0001, ctx.currentTime);
+          ng.gain.linearRampToValueAtTime(0.1, ctx.currentTime + 0.03);
+          ng.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 1.6);
+          osc.connect(ng); ng.connect(g);
+          osc.start(); osc.stop(ctx.currentTime + 1.7);
+        }
+        timer = setTimeout(step, note.d*1000);
+      }
+      timer = setTimeout(step, 600);
+
+      return { gain:g, stop(){ stopped=true; clearTimeout(timer); try{drone.stop();}catch(e){} } };
+    }
+
+    /* Battle: low, filtered drone + a fixed "lub-dub" heartbeat/kick pulse at a
+       steady tempo, for tension and rhythm without disrupting play. */
+    function buildBattleLayer(){
+      const g = ctx.createGain(); g.gain.value = 0; g.connect(musicGain);
+      const drone = ctx.createOscillator(); drone.type='sawtooth'; drone.frequency.value=65;
+      const filt = ctx.createBiquadFilter(); filt.type='lowpass'; filt.frequency.value=220;
+      const dg = ctx.createGain(); dg.gain.value=0.065;
+      drone.connect(filt); filt.connect(dg); dg.connect(g); drone.start();
+
+      let stopped = false, timer = null, beat = 0;
+      const tempoMs = 560; // steady driving pulse
+      function pulse(){
+        if (stopped) return;
+        const strong = beat % 2 === 0; // "lub" (strong) / "dub" (soft) alternation
+        const osc = ctx.createOscillator(); osc.type='sine';
+        osc.frequency.setValueAtTime(strong ? 62 : 78, ctx.currentTime);
+        osc.frequency.exponentialRampToValueAtTime(strong ? 34 : 42, ctx.currentTime + 0.16);
+        const ng = ctx.createGain();
+        ng.gain.setValueAtTime(strong ? 0.24 : 0.13, ctx.currentTime);
+        ng.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + (strong ? 0.22 : 0.15));
+        osc.connect(ng); ng.connect(g);
+        osc.start(); osc.stop(ctx.currentTime + 0.3);
+        beat++;
+        timer = setTimeout(pulse, tempoMs);
+      }
+      timer = setTimeout(pulse, 300);
+
+      return { gain:g, stop(){ stopped=true; clearTimeout(timer); try{drone.stop();}catch(e){} } };
+    }
+
+    const BUILDERS = { title:buildTitleLayer, story:buildStoryLayer, battle:buildBattleLayer };
+
+    function setScene(name, fade){
+      if (!ctx || muted===null) {}
+      if (!ctx) return;
+      if (currentScene === name) return;
+      currentScene = name;
+      const old = layer;
+      const dur = fade == null ? 1.1 : fade;
+      if (old){ fadeGain(old.gain, 0, dur); setTimeout(()=>old.stop(), dur*1000+80); }
+      if (name && BUILDERS[name]){
+        layer = BUILDERS[name]();
+        fadeGain(layer.gain, 1, dur);
+      } else {
+        layer = null;
+      }
+    }
+
+    function onScreen(screenId){
+      if (!ctx) return;
+      const map = { 'screen-title':'title', 'screen-story':'story', 'screen-battle':'battle',
+                    'screen-victory':'story', 'screen-defeat':'story', 'screen-album':'story' };
+      if (map[screenId]) setScene(map[screenId]);
+    }
+
+    return {
+      init,
+      onScreen,
+      toggleMute(){
+        muted = !muted;
+        if (ctx) fadeGain(master, muted ? 0 : VOL, 0.25);
+        return muted;
+      },
+      isMuted(){ return muted; },
+      playCardWhoosh(){ init(); burst(0.5, 1800, 'highpass', 0.16); tone(90,0.6,'sine',0.12,50); },
+      playDraw(){ if(!ctx) return; burst(0.09, 3200, 'highpass', 0.1); },
+      playAttack(){ if(!ctx) return; tone(130,0.22,'square',0.16,55); burst(0.08,2200,'lowpass',0.09); },
+      playHeal(){ if(!ctx) return; tone(660,0.5,'sine',0.13,880); },
+      playBuff(){ if(!ctx) return; tone(440,0.3,'triangle',0.13,660); },
+      playSpecial(){ if(!ctx) return; tone(220,0.35,'sawtooth',0.1,330); burst(0.12,1600,'bandpass',0.06); },
+      playEnemyHit(){ if(!ctx) return; tone(85,0.35,'sine',0.22,40); burst(0.12,180,'lowpass',0.18); },
+      playDeflect(){ if(!ctx) return; tone(520,0.3,'sine',0.1,700); },
+      playVictory(){ if(!ctx) return; [523.3,659.3,784.0].forEach((f,i)=>setTimeout(()=>tone(f,0.7,'sine',0.14),i*160)); },
+      playDefeat(){ if(!ctx) return; tone(160,1.0,'sine',0.16,70); }
+    };
+  })();
 
   /* ---------------- STORY SCREEN ---------------- */
   function renderDialogue(){
@@ -420,14 +737,62 @@
   }
 
   /* ---------------- TRANSITION ---------------- */
+  const SUITS = [
+    { s:'♠', color:'var(--spade)' }, { s:'♦', color:'var(--diamond)' },
+    { s:'♥', color:'var(--heart)' }, { s:'♣', color:'var(--club)' }
+  ];
+
+  function playFateCardAnimation(target){
+    const card = $('#fate-card');
+    const pip = $('#pip-main');
+    const glow = $('#card-glow');
+    const loadingText = $('#loading-text');
+
+    // reset to card-back, no transition, force reflow
+    card.style.transition = 'none';
+    card.style.transform = 'rotateY(0deg) scale(0.86)';
+    glow.classList.remove('show');
+    loadingText.textContent = '命运展开中...';
+    void card.offsetWidth;
+
+    // Phase 1 (0-260ms): card floats in, still showing its back
+    requestAnimationFrame(() => {
+      card.style.transition = 'transform .26s ease-out';
+      card.style.transform = 'rotateY(0deg) scale(1)';
+    });
+
+    // Phase 2 (260-1180ms): flash suits while spinning fast through multiple turns
+    let flashIdx = 0;
+    const flashTimer = setInterval(() => {
+      const suit = SUITS[flashIdx % SUITS.length];
+      pip.textContent = suit.s;
+      pip.style.color = suit.color;
+      flashIdx++;
+    }, 85);
+
+    setTimeout(() => {
+      card.style.transition = 'transform .92s cubic-bezier(.32,.08,.18,1)';
+      // 900deg % 360 = 180 -> ends facing front
+      card.style.transform = 'rotateY(900deg) scale(1.04)';
+    }, 260);
+
+    // Phase 3 (1180-1620ms): settle on final suit, glow + gentle bounce
+    setTimeout(() => {
+      clearInterval(flashTimer);
+      const finalSuit = SUITS[Math.floor(Math.random()*SUITS.length)];
+      pip.textContent = finalSuit.s;
+      pip.style.color = finalSuit.color;
+      card.style.transition = 'transform .44s ease-out';
+      card.style.transform = 'rotateY(900deg) scale(1)';
+      glow.classList.add('show');
+      loadingText.textContent = target === 'album' ? '翻开记忆...' : '进入战斗...';
+    }, 1180);
+  }
+
   function runTransition(target){
     showScreen('screen-transition');
-    // restart animation
-    const face = document.querySelector('.card-face');
-    face.style.animation = 'none';
-    void face.offsetWidth;
-    face.style.animation = '';
-    document.querySelectorAll('.pip').forEach(p => { p.style.animation = 'none'; void p.offsetWidth; p.style.animation=''; });
+    AudioSys.playCardWhoosh();
+    playFateCardAnimation(target);
 
     setTimeout(() => {
       if (target === 'battle') startBattle();
@@ -475,6 +840,7 @@
       state.player.discard = [];
     }
     state.player.hand.push(state.player.deck.pop());
+    AudioSys.playDraw();
   }
 
   function setLog(msg){
@@ -550,16 +916,20 @@
       logMsg = `你打出 ${def.label}，造成 ${dmg} 点伤害`;
       const sprite = $('#enemy-sprite');
       sprite.classList.remove('hit'); void sprite.offsetWidth; sprite.classList.add('hit');
+      AudioSys.playAttack();
     } else if (def.type === 'heal'){
       const before = state.player.hp;
       state.player.hp = Math.min(state.player.maxHp, state.player.hp + def.value);
       logMsg = `你打出 ${def.label}，恢复 ${state.player.hp - before} 点生命`;
+      AudioSys.playHeal();
     } else if (def.type === 'buff'){
       state.player.buffNextAtk += def.value;
       logMsg = `你打出 ${def.label}，下次攻击将强化`;
+      AudioSys.playBuff();
     } else if (def.type === 'special'){
       state.player.skipEnemyAttack = true;
       logMsg = `你打出 ${def.label}，敌人的下次攻击将被跳过`;
+      AudioSys.playSpecial();
     }
 
     checkCombo(def.type);
@@ -608,13 +978,16 @@
       dmg = 0;
       msg = `${state.enemy.name} 的攻击被跳过了`;
       state.player.skipEnemyAttack = false;
+      AudioSys.playDeflect();
     } else if (state.player.invincibleNextEnemyTurn){
       dmg = 0;
       msg = `你处于无敌状态，完全抵挡了攻击`;
       state.player.invincibleNextEnemyTurn = false;
+      AudioSys.playDeflect();
     } else {
       state.player.hp = Math.max(0, state.player.hp - dmg);
       msg = `${state.enemy.name} 发动攻击，你受到 ${dmg} 点伤害`;
+      AudioSys.playEnemyHit();
     }
     setLog(msg);
 
@@ -635,9 +1008,11 @@
   function onVictory(){
     state.collection.add(MEMORY_CARD.id);
     showScreen('screen-victory');
+    AudioSys.playVictory();
   }
   function onDefeat(){
     showScreen('screen-defeat');
+    AudioSys.playDefeat();
   }
 
   /* ---------------- ALBUM ---------------- */
@@ -653,18 +1028,87 @@
         <div class="suit">${owned ? def.suit : '?'}</div>
         <div class="aname ${owned ? '' : 'empty-txt'}">${owned ? def.label : '未收录'}</div>
       `;
+      if (owned){
+        bindLongPress(slot, () => openCardDetail(def));
+      }
       grid.appendChild(slot);
     });
     $('#album-count').textContent = `已收录 ${state.collection.size}/52`;
     showScreen('screen-album');
   }
 
+  /* ---------------- LONG PRESS (card detail trigger) ---------------- */
+  const LONG_PRESS_MS = 600;
+  function bindLongPress(el, onLongPress){
+    let timer = null;
+    let fired = false;
+
+    function start(e){
+      fired = false;
+      clearTimeout(timer);
+      timer = setTimeout(() => {
+        fired = true;
+        onLongPress();
+      }, LONG_PRESS_MS);
+    }
+    function cancel(){
+      clearTimeout(timer);
+    }
+
+    // Mouse (PC)
+    el.addEventListener('mousedown', start);
+    el.addEventListener('mouseup', cancel);
+    el.addEventListener('mouseleave', cancel);
+
+    // Touch (mobile)
+    el.addEventListener('touchstart', (e) => { start(e); }, { passive:true });
+    el.addEventListener('touchend', cancel);
+    el.addEventListener('touchcancel', cancel);
+    el.addEventListener('touchmove', cancel);
+
+    // prevent the mobile long-press context menu / text selection callout
+    el.addEventListener('contextmenu', (e) => e.preventDefault());
+  }
+
+  /* ---------------- CARD DETAIL MODAL ---------------- */
+  function openCardDetail(def){
+    $('#cd-suit').textContent = def.suit;
+    $('#cd-suit').style.color = def.suitClass === 'suit-spade' ? 'var(--spade)'
+      : def.suitClass === 'suit-heart' ? 'var(--heart)'
+      : def.suitClass === 'suit-diamond' ? 'var(--diamond)'
+      : def.suitClass === 'suit-club' ? 'var(--club)'
+      : 'var(--memory)';
+    $('#cd-name').textContent = def.label;
+    $('#cd-type').textContent = def.typeLabel || '——';
+    $('#cd-desc').textContent = def.desc || '——';
+    const rarityEl = $('#cd-rarity');
+    rarityEl.textContent = def.rarity || '——';
+    rarityEl.className = 'cd-value rarity-' + (def.rarity || '');
+    $('#cd-story').textContent = def.story || '暂无记录。';
+    $('#cd-obtain').textContent = def.obtain || '未知';
+    $('#card-detail-overlay').classList.add('active');
+  }
+  function closeCardDetail(){
+    $('#card-detail-overlay').classList.remove('active');
+  }
+  $('#card-detail-overlay').addEventListener('click', closeCardDetail);
+
   /* ---------------- BOOTSTRAP ---------------- */
   $('#btn-start').addEventListener('click', () => {
+    AudioSys.init();
     state.dialogueIndex = 0;
     showScreen('screen-story');
     renderDialogue();
     $('#screen-story').addEventListener('click', advanceDialogue);
+  });
+
+  $('#sound-toggle').addEventListener('click', (e) => {
+    e.stopPropagation();
+    AudioSys.init();
+    const isMuted = AudioSys.toggleMute();
+    const btn = $('#sound-toggle');
+    btn.classList.toggle('muted', isMuted);
+    btn.textContent = isMuted ? '✕' : '♪';
   });
 
   $('#btn-end-turn').addEventListener('click', endTurn);
